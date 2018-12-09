@@ -33,7 +33,6 @@ public class ReptileController {
     public int insert(HttpServletRequest request,HttpServletResponse response, ReptileEntity reptileEntity) throws Exception{
 		
 		try {
-			PageHelper.startPage(1, 5, true);
 			reptileImpl.insert(reptileEntity);
 		} catch (Exception e) {
 			e.printStackTrace();

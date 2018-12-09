@@ -53,10 +53,10 @@ pagehelper:
     
     
 
-WEB_URL: http://weixin.sogou.com/weixin?type=2&ie=utf8
+WEB_URL: http://weixin.sogou.com/weixin?type=2&ie=utf8&s_from=input
 WEB_ENCODER: utf-8
 WEB_COOKIE: ABTEST=3|1543974603|v1; IPLOC=CN3310; SUID=BA014BDA4018960A000000005C072ECB; SUID=BA014BDA3118960A000000005C072ECB; weixinIndexVisited=1; SUV=000C3DE0DA4B01BA5C072ECC448AB695; SNUID=3880CA5B8284FDBD56BC53148234889E; sct=11; td_cookie=3793477796; ppinf=5|1544151103|1545360703|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQxNTExMDN8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=FeOjayEfjciz50eAj-4VPmprjY1w-VhDqUpgjQsd0w-zOH2uZY5pvL0sG3jPSPFsZ5-2TKLPPoNWZxZYIjqCcnTNVSsVv5M-p3HOsDB5GXtj4WJH-vf2ZNOcEMghPs6VVv7_v2yuhIt6pg-NvfN4LXDYVnJ14QDF5bGtWO6loXk; sgid=03-36145051-AVwJ4DibicLM3GwicRqTxEjxWM; ppmdig=154415307500000083dd74f509e4e658b9c1532f559bf451
 USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.23 Safari/537.36
 #TASK: 5000 https://blog.csdn.net/xinyuan_java/article/details/51602088
 #[秒] [分] [小时] [日] [月] [周] [年]  0/5 * * * * ?
-TASK_TIME: 0 0/1 * * * ?
+TASK_TIME: 0 0/3 * * * ?

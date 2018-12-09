@@ -3,6 +3,7 @@ package com.reptile.task;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -30,6 +31,7 @@ import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
 import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ArticleWithBLOBs;
+import com.reptile.service.Gather;
 
 @Component
 @EnableScheduling
@@ -60,30 +62,20 @@ public class SchedulerTask {
 	    	Element contentDiv = null;
 	    	String contentTxt = null;
 	    	String articleId = null;
+	    	Random ran = new Random();
 	    	for (Article article : list) {
 	    		articleId = article.getArticleId();
 				
-				try {
+			try {
 				con =Jsoup.connect(article.getDetailsPath());//获取连接 
-
-				con.maxBodySize(0);
-				con.header("Accept", "application/json, text/javascript, */*; q=0.01").header("Accept-Encoding",
-		                "gzip, deflate");
-		        con.header("Accept-Language", "zh-CN,zh;q=0.9").header("Connection", "keep-alive");
-		        con.header("Content-Length", "72").header("Content-Type",
-		                "application/x-www-form-urlencoded; charset=UTF-8");
-		        con.header("Host", "qiaoliqiang.cn").header("Referer", "http://qiaoliqiang.cn/Exam/");
-		        con.header("User-Agent",
-		                "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
-		                .header("X-Requested-With", "XMLHttpRequest");
+				con = Gather.getHeader(con, ran, article.getDetailsPath());
 			        
 				document = con.get();
-				System.out.println(document.toString());
 				
 				record = new ArticleWithBLOBs();
 				 contentDiv = document.getElementById("img-content");
 				 if(contentDiv==null) {
-					 record.setState(3D);
+					 record.setState(2D);
 				 }else {
 					 contentTxt = contentDiv.text();
 					 record.setDetailsDiv(contentDiv.toString().getBytes());
@@ -94,12 +86,12 @@ public class SchedulerTask {
 				articleMapper.updateByDetails(record);
 				articleId = null;
 				
-			} catch (IOException e) {
+				Thread.sleep(ran.nextInt(18000));
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 				
 			}
-	        System.out.println("定时任务2" + new Date().getTime());
 	    }
 
 }

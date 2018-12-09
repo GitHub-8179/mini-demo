@@ -39,9 +39,8 @@ public class ReptileImpl implements IReptile{
 		List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
 		for (ArticleType articleType : listArticleType) {
 			
-			System.out.println(articleType.getArticleTypeKeyword());
-//			gather.setData(1,articleType);
-			gather.getData(1, articleType.getArticleTypeKeyword(),articleType.getArticleTypeId());
+			gather.setData(1,articleType);
+//			gather.getData(1, articleType.getArticleTypeKeyword(),articleType.getArticleTypeId());
 			break;
 		}
 //		mapper.insert(record);

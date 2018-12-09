@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.net.URL;
@@ -157,56 +158,160 @@ public class Gather {
 		StringBuffer url = new StringBuffer(WEB_URL);
 //		url.append("type=2&ie=utf8&s_from=input");
 		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "%26"));
-		url.append("&tsn=5");
-		url.append("&ft=2018-12-01");
-		url.append("&et=2018-12-09");
+//		url.append("&tsn=5");
+//		url.append("&ft=2018-12-01");
+//		url.append("&et=2018-12-09");
 		url.append("&wxid=");
 		url.append("&usip=");
-		url.append("&page=");
-		url.append("&s_from=input");
 		url.append("&_sug_type_=");
+		url.append("&_sug_=n");
 		
-		
-//		Connection con=Jsoup.connect("https://weixin.sogou.com/weixin?type=2&s_from=input&query=%E4%BC%A0%E6%84%9F%E5%99%A8%E4%BA%A7%E5%93%81&ie=utf8&_sug_=n&_sug_type_=");//获取连接 
-		Connection con=Jsoup.connect(url.toString());//获取连接 
-		
-		
-		  String urlLogin = "http://qiaoliqiang.cn/Exam/user_login.action";
-	        Connection connect = Jsoup.connect(urlLogin);
-		// 伪造请求头
-        con.header("Accept", "application/json, text/javascript, */*; q=0.01").header("Accept-Encoding",
-                "gzip, deflate");
-        con.header("Accept-Language", "zh-CN,zh;q=0.9").header("Connection", "keep-alive");
-        con.header("Content-Length", "72").header("Content-Type",
-                "application/x-www-form-urlencoded; charset=UTF-8");
-        con.header("Host", "qiaoliqiang.cn").header("Referer", "http://qiaoliqiang.cn/Exam/");
-        con.header("User-Agent",
-                "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
-                .header("X-Requested-With", "XMLHttpRequest");
-        
-        // 携带登陆信息
-        con.data("username", "362501197407067215").data("password", "123456").data("user_type", "2")
-                .data("isRememberme", "yes");
-        
-        //请求url获取响应信息
-        Response res = con.ignoreContentType(true).method(Method.POST).execute();// 执行请求
-        // 获取返回的cookie
-        Map<String, String> cookies = res.cookies();
-        for (Entry<String, String> entry : cookies.entrySet()) {
-            System.out.println(entry.getKey() + "-" + entry.getValue());
-        }
-        
-        
-		con.header("User-Agent", USER_AGENT);
-		con.maxBodySize(0);
-		Document document  = con.get();
-        Elements elements1 = document.getElementsByClass("mun");
-		Element elements = document.getElementsByClass("mun").last();
+		 Random ran =  new Random() ;
+		 Element sogouNext = null;
+		 ReptileEntity reptileEntity=null;
+		 Elements imgtxtBox =null;
+		 String detailsPath =null;
+		 String articleId = null;
+		 String articleTitle =null;
+		 String contentExcerpt = null;
+		 String source = null;
+		 Long createTime = 0L;
+		 String urlPath = url.toString();
+		while(true) {
+			Connection con=Jsoup.connect(urlPath);//获取连接 
+			con = getHeader(con,ran,urlPath);
+//			  String urlLogin = "http://qiaoliqiang.cn/Exam/user_login.action";
+//		        Connection connect = Jsoup.connect(urlLogin);
+			// 伪造请求头
+//	        con.header("Accept", "application/json, text/javascript, */*; q=0.01").header("Accept-Encoding",
+//	                "gzip, deflate");
+//	        con.header("Accept-Language", "zh-CN,zh;q=0.9").header("Connection", "keep-alive");
+//	        con.header("Content-Length", "72").header("Content-Type",
+//	                "application/x-www-form-urlencoded; charset=UTF-8");
+//	        con.header("Host", "qiaoliqiang.cn").header("Referer", "http://qiaoliqiang.cn/Exam/");
+//	        con.header("User-Agent",
+//	                "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
+//	                .header("X-Requested-With", "XMLHttpRequest");
+//	        // 携带登陆信息
+//	        con.data("username", "362501197407067215").data("password", "123456").data("user_type", "2")
+//	                .data("isRememberme", "yes");
+	        
+	        //请求url获取响应信息
+//	        Response res = con.ignoreContentType(true).method(Method.POST).execute();// 执行请求
+//	        // 获取返回的cookie
+//	        Map<String, String> cookies = res.cookies();
+//	        for (Entry<String, String> entry : cookies.entrySet()) {
+//	            System.out.println(entry.getKey() + "-" + entry.getValue());
+//	        }
+			
+			
+			Document document  = con.get();
+			
+			
+			
+			
+			
+			Element elements = document.getElementsByClass("news-list").last();
+			if(elements !=null ) {
+				Elements lis = elements.getElementsByTag("li");
+				if(lis != null) {
+					for (Element e : lis) {
+						
+						reptileEntity = new ReptileEntity();
+						reptileEntity.setArticleTypeId(articleType.getArticleTypeId());
+						imgtxtBox = e.getElementsByTag("div");
+						
+						articleId = e.attr("d");
+						articleId = articleId.substring(articleId.lastIndexOf("-")+1);
+						reptileEntity.setArticleId(articleId);
+						
+						detailsPath = imgtxtBox.select("a").first().attr("href");
+						reptileEntity.setDetailsPath(detailsPath);
+						
+						reptileEntity.setContentCrawl(imgtxtBox.toString().getBytes());
 
-        if(elements !=null ) {
-			Elements lis = elements.getElementsByTag("li");
-        }
+						articleTitle = imgtxtBox.select("h3").last().text();
+						reptileEntity.setArticleTitle(articleTitle);
+						
+						reptileEntity.setArticleKeyword(articleType.getArticleTypeName());
+						
+						contentExcerpt = imgtxtBox.select("p").last().text();
+						reptileEntity.setContentExcerpt(contentExcerpt);
+						
+						Element txtBox2 = imgtxtBox.get(2);
+						source = txtBox2.getElementsByTag("a").first().text();
+						reptileEntity.setSource(source);
+//						
+//						source = imgtxtBox.select("a").last().text();
+//						reptileEntity.setSource(source);
+//
+//						createTime =  Long.valueOf(imgtxtBox.select("a").last().attr("t"));
+						createTime =  Long.valueOf(txtBox2.attr("t"));
+						reptileEntity.setCreateTime( createTime);
+						
+						reptileEntity.setContentType(contentType);
+						
+						mapper.insert(reptileEntity);
+						break;
+					}
+				}
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+	        sogouNext = document.getElementById("sogou_next");
+	        if(sogouNext==null) {
+	        	break;
+	        }else {
+	        	urlPath = sogouNext.attr("href");
+	        	urlPath= "http://weixin.sogou.com/weixin"+urlPath;
+	        	sogouNext = null;
+	        }
+	       
+	        Thread.sleep(ran.nextInt(100000));
+
+	        return;
+		}
 		
+		
+	}
+	
+	
+	public static Connection getHeader(Connection con,Random ran,String url) {
+		con.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+        con.header("Accept-Encoding", "gzip, deflate, br");
+        con.header("Accept-Language", "zh-CN,zh;q=0.9");
+        con.header("Connection", "keep-alive");
+        con.header("Upgrade-Insecure-Requests", "1");
+        
+        switch (ran.nextInt(3)) {
+		case 0:
+			con.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");//360
+			break;
+		case 1:
+			con.header("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
+			break;
+		case 2:
+			con.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");//ie
+			break;
+		default:
+			con.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.23 Safari/537.36");//Chrome
+			break;
+		}
+        con.header("Host", "weixin.sogou.com");
+        con.header("Referer", url);
+        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; ppmdig=15443530730000003295079107421ccd971fa389d5e6f03a; sct=15; JSESSIONID=aaaIQXOl_9SDD6V9Lo_Cw");
+		
+		con.maxBodySize(0);
+		return  con;
 	}
 	
 }
