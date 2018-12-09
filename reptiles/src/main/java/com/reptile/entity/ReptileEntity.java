@@ -19,6 +19,10 @@ public class ReptileEntity implements Serializable{
 	private int contentType;
 	private Integer articleTypeId;
 	private String contentExcerpt;
+	private int state;
+	private byte[] detailsTxt;
+	private byte[] detailsDiv;
+	private String detailsPath;
 
 	public String getArticleId() {
 		return articleId;
@@ -42,6 +46,12 @@ public class ReptileEntity implements Serializable{
 	
 
 	
+	public String getDetailsPath() {
+		return detailsPath;
+	}
+	public void setDetailsPath(String detailsPath) {
+		this.detailsPath = detailsPath;
+	}
 	public String getContentExcerpt() {
 		return contentExcerpt;
 	}
@@ -83,6 +93,24 @@ public class ReptileEntity implements Serializable{
 	}
 	public void setContentType(int contentType) {
 		this.contentType = contentType;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	public byte[] getDetailsTxt() {
+		return detailsTxt;
+	}
+	public void setDetailsTxt(byte[] detailsTxt) {
+		this.detailsTxt = detailsTxt;
+	}
+	public byte[] getDetailsDiv() {
+		return detailsDiv;
+	}
+	public void setDetailsDiv(byte[] detailsDiv) {
+		this.detailsDiv = detailsDiv;
 	}
 
 	

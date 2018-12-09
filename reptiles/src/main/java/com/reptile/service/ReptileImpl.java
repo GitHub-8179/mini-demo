@@ -25,7 +25,7 @@ public class ReptileImpl implements IReptile{
 	private ArticleTypeMapper articleTypeMapper;
 	
 	@Override
-	public int insert(ReptileEntity record) {
+	public int insert(ReptileEntity record) throws Exception {
 		ArticleTypeExample example = new ArticleTypeExample();
 		Criteria c  = example.createCriteria();
 		c.andParentidNotEqualTo(0);
@@ -33,7 +33,9 @@ public class ReptileImpl implements IReptile{
 		for (ArticleType articleType : listArticleType) {
 			
 			System.out.println(articleType.getArticleTypeKeyword());
+//			gather.setData(1,articleType);
 			gather.getData(1, articleType.getArticleTypeKeyword(),articleType.getArticleTypeId());
+			break;
 		}
 //		mapper.insert(record);
 		

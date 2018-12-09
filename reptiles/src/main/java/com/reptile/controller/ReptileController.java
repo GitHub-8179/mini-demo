@@ -24,7 +24,11 @@ public class ReptileController {
   	@ResponseBody
     public int insert(HttpServletRequest request,HttpServletResponse response, ReptileEntity reptileEntity) throws Exception{
 		
-		reptileImpl.insert(reptileEntity);
+		try {
+			reptileImpl.insert(reptileEntity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 }

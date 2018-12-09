@@ -23,7 +23,8 @@
 	CONTENT_TYPE,
 	ARTICLE_TYPE_ID,
 	CONTENT_EXCERPT,
-	share_count,collect_count,collect_initcount,share_initcount
+	details_Path,
+	share_count,collect_count,collect_initcount,share_initcount,state
 	) VALUES(
 	#{articleId},
 	#{articleTitle},
@@ -35,7 +36,8 @@
 	#{contentType},
 	#{articleTypeId} ,
 	#{contentExcerpt} ,
-	0,0,0,0 
+	#{detailsPath},
+	0,0,0,0,0 
 	)
 	ON DUPLICATE KEY UPDATE 
 	ARTICLE_ID = #{articleId},
