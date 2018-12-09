@@ -22,5 +22,7 @@ public interface ArticleMapper {
 
     int updateByExampleWithBLOBs(@Param("record") ArticleWithBLOBs record, @Param("example") ArticleExample example);
 
+    int updateByDetails(@Param("record") ArticleWithBLOBs record);
+
     int updateByExample(@Param("record") Article record, @Param("example") ArticleExample example);
 }
