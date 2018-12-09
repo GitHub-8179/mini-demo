@@ -4,13 +4,19 @@ server:
   #项目名，如果不设定，默认是 /
  # context-path: /vote
   
+ #http://www.cnblogs.com/bigdataZJ/p/springboot-log.html
 logging:
   #日志存储地址
-  file: "E:/logs/config/demo.log"
- #  level:
+  file: E:/logs/config/reptiles.log
+  level:
  #   sun: warn
  #   orgSpringframework: info
- #   root: debug
+ #  root: debug
+   com.reptile.service: INFO
+   com.reptile.task: INFO
+   
+#logging.pattern.console=%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n 
+#logging.pattern.file=%d{yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n
 info:
   name: "入门案例"
 

@@ -22,6 +22,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ import com.reptile.entity.ReptileEntity;
 
 @Service
 public class Gather {
+	
+	private static final Logger log = LoggerFactory.getLogger(Gather.class);
 
 	 @Value("${WEB_URL}")
 	private String WEB_URL ;
@@ -275,7 +279,7 @@ public class Gather {
 	        	urlPath= "http://weixin.sogou.com/weixin"+urlPath;
 	        	sogouNext = null;
 	        }
-	       
+	        log.info("访问地址："+urlPath);
 	        Thread.sleep(ran.nextInt(100000));
 
 	        return;

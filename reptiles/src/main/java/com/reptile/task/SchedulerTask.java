@@ -13,6 +13,8 @@ import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +41,8 @@ import com.reptile.service.Gather;
 //@PropertySource("classpath:application.yml")
 
 public class SchedulerTask {
-	
+	private static final Logger log = LoggerFactory.getLogger(SchedulerTask.class);
+
 		@Autowired
 		private ArticleMapper articleMapper;
 	
@@ -63,35 +66,36 @@ public class SchedulerTask {
 	    	String contentTxt = null;
 	    	String articleId = null;
 	    	Random ran = new Random();
+	    	String detailsPath = null;
 	    	for (Article article : list) {
 	    		articleId = article.getArticleId();
-				
-			try {
-				con =Jsoup.connect(article.getDetailsPath());//获取连接 
-				con = Gather.getHeader(con, ran, article.getDetailsPath());
-			        
-				document = con.get();
-				
-				record = new ArticleWithBLOBs();
-				 contentDiv = document.getElementById("img-content");
-				 if(contentDiv==null) {
-					 record.setState(2D);
-				 }else {
-					 contentTxt = contentDiv.text();
-					 record.setDetailsDiv(contentDiv.toString().getBytes());
-					 record.setDetailsTxt(contentTxt.getBytes());
-					 record.setState(1D);
-				 }
-				 record.setArticleId(articleId);
-				articleMapper.updateByDetails(record);
-				articleId = null;
-				
-				Thread.sleep(ran.nextInt(18000));
-			} catch (Exception e) {
-				e.printStackTrace();
+	    		detailsPath = article.getDetailsPath();
+				try {
+					con =Jsoup.connect(detailsPath);//获取连接 
+					con = Gather.getHeader(con, ran, detailsPath);
+				        
+					document = con.get();
+					
+					record = new ArticleWithBLOBs();
+					 contentDiv = document.getElementById("img-content");
+					 if(contentDiv==null) {
+						 record.setState(2D);
+					 }else {
+						 contentTxt = contentDiv.text();
+						 record.setDetailsDiv(contentDiv.toString().getBytes());
+						 record.setDetailsTxt(contentTxt.getBytes());
+						 record.setState(1D);
+					 }
+					 record.setArticleId(articleId);
+					articleMapper.updateByDetails(record);
+					articleId = null;
+					
+					Thread.sleep(ran.nextInt(18000));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-				
-			}
+	    	log.info("插入文章链接："+detailsPath);
 	    }
 
 }
