@@ -2,20 +2,23 @@ package com.reptile;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.github.pagehelper.PageHelper;
+import com.reptile.entity.ReptileEntity;
+import com.reptile.service.IReptile;
 
 @SpringBootApplication
 //@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 //@MapperScan(value = "com.reptile.dao")
 public class ReptilesApplication {
 
+	
 	public static void main(String[] args) {
-//		SpringApplication.run(ReptilesApplication.class, args);
-		
-
+		SpringApplication.run(ReptilesApplication.class, args);
 
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss:SSS");
 //		try {

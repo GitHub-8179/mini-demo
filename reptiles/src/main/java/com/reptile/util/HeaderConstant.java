@@ -8,10 +8,10 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource({"classpath:webUser.properties"})
 public class HeaderConstant {
 	
-	@Value("#{'${userAgent}'.split('#;#').length}")
+	@Value("#{'${UserAgentValue}'.split('#;#').length}")
 	public static int userAgentRan;
 	
-	@Value("#{'${userAgentValue}'.split('#;#')}")
+	@Value("#{'${UserAgentValue}'.split('#;#')}")
 	public static List<String> userAgent;
 	
 	@Value("${UserAgent}")
