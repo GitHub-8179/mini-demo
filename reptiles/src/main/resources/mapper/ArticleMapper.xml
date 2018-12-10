@@ -116,7 +116,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from article
+    from article1
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -357,7 +357,7 @@
   </update>
   
   <update id="updateByDetails" parameterType="map">
-    update article
+    update article1
     set 
       state = #{record.state,jdbcType=DOUBLE},
       details_txt = #{record.detailsTxt,jdbcType=LONGVARBINARY},

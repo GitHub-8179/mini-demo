@@ -37,23 +37,10 @@ public class ReptileImpl implements IReptile{
 		Criteria c  = example.createCriteria();
 		c.andParentidNotEqualTo(0);
 		List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
-		for (ArticleType articleType : listArticleType) {
 			
+		for (ArticleType articleType : listArticleType) {
 			gather.setData(1,articleType);
-//			gather.getData(1, articleType.getArticleTypeKeyword(),articleType.getArticleTypeId());
-			break;
 		}
-//		mapper.insert(record);
-//		
-//		ArticleExample example1 = new ArticleExample();
-//    	com.reptile.entity.ArticleExample.Criteria c1  =  example1.createCriteria();
-//    	c1.andStateEqualTo(0D);
-//    	List<Article> list = articleMapper.selectByExample(example1);
-//
-//    	PageInfo p = new PageInfo(list);
-//    	for (Article article : list) {
-//			System.out.println(article.getArticleId());
-//		}
 		
 		return 0;
 	}

@@ -1,14 +1,8 @@
 package com.reptile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import com.github.pagehelper.PageHelper;
@@ -19,7 +13,7 @@ import com.github.pagehelper.PageHelper;
 public class ReptilesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReptilesApplication.class, args);
+//		SpringApplication.run(ReptilesApplication.class, args);
 		
 
 
@@ -54,7 +48,3 @@ public class ReptilesApplication {
 }
 
 
-
-//1543996946
-//1543997461074
-//1543997673661

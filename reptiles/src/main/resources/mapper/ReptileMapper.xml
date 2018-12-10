@@ -12,7 +12,7 @@
   
 
   <insert id="insert" parameterType="com.reptile.entity.ReptileEntity">
-    INSERT INTO article (
+    INSERT INTO article1 (
 	ARTICLE_ID,
 	ARTICLE_TITLE,
 	AUTHOR,

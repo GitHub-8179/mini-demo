@@ -20,7 +20,6 @@ public class Gather {
 	 private String WEB_URL = "http://weixin.sogou.com/weixin?oq=&query=3d%E6%89%93%E5%8D%B0&_sug_type_=1&sut=0&lkt=0%2C0%2C0&s_from=input&ri=0&_sug_=n&type=2&sst0=1543993462329&page=1&ie=utf8&p=40040108&dp=1&w=01015002&dr=1";
 	
 	@Value("${WEB_ENCODER}")
-//	private String WEB_ENCODER ;
 	private String WEB_ENCODER ="utf-8";
 	public void getData(String type) {
 		

@@ -39,14 +39,8 @@ public class Gather {
 
 	 @Value("${WEB_URL}")
 	private String WEB_URL ;
-	
-	@Value("${WEB_ENCODER}")
-	private String WEB_ENCODER ;
 	@Value("${WEB_COOKIE}")
 	private String WEB_COOKIE ;
-	
-	@Value("${USER_AGENT}")
-	private String USER_AGENT;
 	
 	@Autowired
 	private ReptileDao mapper;
@@ -158,9 +152,9 @@ public class Gather {
 	
 	
 	public void setData(int contentType,ArticleType articleType) throws Exception {
-		
+
 		StringBuffer url = new StringBuffer(WEB_URL);
-//		url.append("type=2&ie=utf8&s_from=input");
+		url.append("?type=2&ie=utf8&s_from=input");
 		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "%26"));
 //		url.append("&tsn=5");
 //		url.append("&ft=2018-12-01");
@@ -184,36 +178,8 @@ public class Gather {
 		while(true) {
 			Connection con=Jsoup.connect(urlPath);//获取连接 
 			con = getHeader(con,ran,urlPath);
-//			  String urlLogin = "http://qiaoliqiang.cn/Exam/user_login.action";
-//		        Connection connect = Jsoup.connect(urlLogin);
-			// 伪造请求头
-//	        con.header("Accept", "application/json, text/javascript, */*; q=0.01").header("Accept-Encoding",
-//	                "gzip, deflate");
-//	        con.header("Accept-Language", "zh-CN,zh;q=0.9").header("Connection", "keep-alive");
-//	        con.header("Content-Length", "72").header("Content-Type",
-//	                "application/x-www-form-urlencoded; charset=UTF-8");
-//	        con.header("Host", "qiaoliqiang.cn").header("Referer", "http://qiaoliqiang.cn/Exam/");
-//	        con.header("User-Agent",
-//	                "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
-//	                .header("X-Requested-With", "XMLHttpRequest");
-//	        // 携带登陆信息
-//	        con.data("username", "362501197407067215").data("password", "123456").data("user_type", "2")
-//	                .data("isRememberme", "yes");
-	        
-	        //请求url获取响应信息
-//	        Response res = con.ignoreContentType(true).method(Method.POST).execute();// 执行请求
-//	        // 获取返回的cookie
-//	        Map<String, String> cookies = res.cookies();
-//	        for (Entry<String, String> entry : cookies.entrySet()) {
-//	            System.out.println(entry.getKey() + "-" + entry.getValue());
-//	        }
-			
 			
 			Document document  = con.get();
-			
-			
-			
-			
 			
 			Element elements = document.getElementsByClass("news-list").last();
 			if(elements !=null ) {
@@ -256,7 +222,6 @@ public class Gather {
 						reptileEntity.setContentType(contentType);
 						
 						mapper.insert(reptileEntity);
-						break;
 					}
 				}
 				
@@ -282,7 +247,6 @@ public class Gather {
 	        log.info("访问地址："+urlPath);
 	        Thread.sleep(ran.nextInt(100000));
 
-	        return;
 		}
 		
 		

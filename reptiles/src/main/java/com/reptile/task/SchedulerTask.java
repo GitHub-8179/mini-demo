@@ -54,7 +54,7 @@ public class SchedulerTask {
 //	    @Scheduled(cron = "0/30 * * * * ?")
 	    @Scheduled(cron = "${TASK_TIME}")
 	    public void job2(){
-	    	PageHelper.startPage(1, 5);
+	    	PageHelper.startPage(1, 10);
 	    	ArticleExample example = new ArticleExample();
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
 	    	c.andStateEqualTo(0D);
@@ -92,7 +92,16 @@ public class SchedulerTask {
 					
 					Thread.sleep(ran.nextInt(18000));
 				} catch (Exception e) {
-					e.printStackTrace();
+					 try {
+						record.setState(2D);
+						 record.setDetailsDiv(null);
+						 record.setDetailsTxt(null);
+						articleMapper.updateByDetails(record);
+						log.info("插入文章链接错误！"+record+":"+contentTxt);
+					} catch (Exception e1) {
+						log.info("修改文章状态为2错误！！"+record);
+					}
+
 				}
 			}
 	    	log.info("插入文章链接："+detailsPath);
