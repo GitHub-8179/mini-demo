@@ -23,8 +23,8 @@
 	CONTENT_TYPE,
 	ARTICLE_TYPE_ID,
 	CONTENT_EXCERPT,
-	details_Path,
-	share_count,collect_count,collect_initcount,share_initcount,state
+	DETAILS_PATH,
+	SHARE_COUNT,COLLECT_COUNT,COLLECT_INITCOUNT,SHARE_INITCOUNT,STATE
 	) VALUES(
 	#{articleId},
 	#{articleTitle},
@@ -49,6 +49,7 @@
 	SOURCE = #{source},
 	CONTENT_TYPE = #{contentType},
 	ARTICLE_TYPE_ID = #{articleTypeId},
+	DETAILS_PATH = #{detailsPath},
 	CONTENT_EXCERPT = #{contentExcerpt} 
 
   </insert>

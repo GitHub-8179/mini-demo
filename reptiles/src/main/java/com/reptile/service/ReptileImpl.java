@@ -15,6 +15,7 @@ import com.reptile.entity.ArticleType;
 import com.reptile.entity.ArticleTypeExample;
 import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ReptileEntity;
+import com.reptile.util.GetIPPost;
 
 @Service
 public class ReptileImpl implements IReptile{
@@ -38,9 +39,16 @@ public class ReptileImpl implements IReptile{
 		c.andParentidNotEqualTo(0);
 		List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
 			
-		for (ArticleType articleType : listArticleType) {
-			gather.setData(1,articleType);
-		}
+		List ipPost = GetIPPost.getIp(3);
+		
+		
+		gather.setData(1,listArticleType.get(1),ipPost);
+		gather.setData(1,listArticleType.get(2),ipPost);
+		gather.setData(1,listArticleType.get(3),ipPost);
+
+//		for (ArticleType articleType : listArticleType) {
+//			gather.setData(1,articleType,ipPost);
+//		}
 		
 		return 0;
 	}

@@ -20,6 +20,7 @@ import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
 import com.reptile.entity.ArticleWithBLOBs;
 import com.reptile.service.Gather;
+import com.reptile.util.GetIPPost;
 
 @Component
 @EnableScheduling
@@ -35,7 +36,7 @@ public class SchedulerTask {
 //	    @Scheduled(cron = "0/30 * * * * ?")
 	    @Scheduled(cron = "${TASK_TIME}")
 	    public void job2(){
-	    	PageHelper.startPage(1, 10);
+	    	PageHelper.startPage(1, 5);
 	    	ArticleExample example = new ArticleExample();
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
 	    	c.andStateEqualTo(0D);
@@ -48,15 +49,15 @@ public class SchedulerTask {
 	    	String articleId = null;
 	    	Random ran = new Random();
 	    	String detailsPath = null;
+	    	int i =0 ;
+	    	
+	    	List ipPost = GetIPPost.getIp(2);
 	    	for (Article article : list) {
 	    		articleId = article.getArticleId();
 	    		detailsPath = article.getDetailsPath();
 				try {
-					con =Jsoup.connect(detailsPath);//获取连接 
-					con = Gather.getHeader(con, ran, detailsPath);
-				        
-					document = con.get();
-					
+					document = Gather.getHeader(con, ran, detailsPath,ipPost,i);
+					if(document==null) {continue;}
 					record = new ArticleWithBLOBs();
 					 contentDiv = document.getElementById("img-content");
 					 if(contentDiv==null) {
