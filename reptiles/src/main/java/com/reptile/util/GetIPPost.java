@@ -32,25 +32,33 @@ public class GetIPPost {
 					Elements tds = null;
 					String ip = "";
 					int post = 0;
+//					String post =null;
 					if(trs!=null) {
 						for (int i = 1,num= trs.size(); i <num; i++) {
 							tr = trs.get(i);
 							tds = tr.select("td");
 							ip = tds.get(1).text();
 							post = Integer.valueOf(tds.get(2).text());
+//							post = tds.get(2).text();
+
+//							list.add(ip+":"+post);
+
 							try {
 								connect(ip,post);
 								list.add(ip+":"+post);
-								if(list.size()>20)break;
 //								list.add(new Object[]{ip,post});
 								System.out.println(j+":"+i+"="+tds.get(1).text()+"::"+tds.get(2).text());
 							} catch (Exception e) {
 							}
 						}
+						for (String l : list) {
+							System.out.println(l);
+						}
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				return list;
 			}
 			return list;
 	}

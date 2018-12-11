@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
@@ -16,10 +15,15 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.PageHelper;
 import com.reptile.dao.ArticleMapper;
+import com.reptile.dao.ArticleTypeMapper;
 import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
+import com.reptile.entity.ArticleType;
+import com.reptile.entity.ArticleTypeExample;
+import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ArticleWithBLOBs;
 import com.reptile.service.Gather;
+import com.reptile.service.IReptile;
 import com.reptile.util.GetIPPost;
 
 @Component
@@ -32,11 +36,20 @@ public class SchedulerTask {
 		@Autowired
 		private ArticleMapper articleMapper;
 		
+		@Autowired
+		private IReptile reptileImpl;
+		
+		@Autowired
+		private ArticleTypeMapper articleTypeMapper;
+		
+		@Autowired
+		private Gather gather;
+		
+		public List ipPost;
 	 
-//	    @Scheduled(cron = "0/30 * * * * ?")
 	    @Scheduled(cron = "${TASK_TIME}")
 	    public void job2(){
-	    	PageHelper.startPage(1, 5);
+	    	PageHelper.startPage(1, 10);
 	    	ArticleExample example = new ArticleExample();
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
 	    	c.andStateEqualTo(0D);
@@ -51,7 +64,7 @@ public class SchedulerTask {
 	    	String detailsPath = null;
 	    	int i =0 ;
 	    	
-	    	List ipPost = GetIPPost.getIp(2);
+	    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
 	    	for (Article article : list) {
 	    		articleId = article.getArticleId();
 	    		detailsPath = article.getDetailsPath();
@@ -90,4 +103,32 @@ public class SchedulerTask {
 			}
 	    }
 
+	    
+	    @Scheduled(cron = "${ArticleTask}")
+	    public void job1(){
+		   try {
+			   ArticleTypeExample example = new ArticleTypeExample();
+				Criteria c  = example.createCriteria();
+				c.andParentidNotEqualTo(0);
+				List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
+					
+		    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
+				
+				for (ArticleType articleType : listArticleType) {
+					gather.setData(1,articleType,ipPost);
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    }
+		   
+	   @Scheduled(cron = "${setIpPost}")
+	    public void setIpPost(){
+		   try {
+			    ipPost = GetIPPost.getIp(6);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	   }
+	   
 }

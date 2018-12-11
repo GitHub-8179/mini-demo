@@ -65,4 +65,6 @@ WEB_COOKIE: ABTEST=3|1543974603|v1; IPLOC=CN3310; SUID=BA014BDA4018960A000000005
 USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.23 Safari/537.36
 #TASK: 5000 https://blog.csdn.net/xinyuan_java/article/details/51602088
 #[秒] [分] [小时] [日] [月] [周] [年]  0/5 * * * * ?
-TASK_TIME: 0 0/5 * * * ?
+TASK_TIME: 0 0/3 * * * ?
+ArticleTask: 0 30 22 * * ?
+setIpPost: 0 0 12 * * ?

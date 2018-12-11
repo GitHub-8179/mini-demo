@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import com.reptile.entity.ReptileEntity;
 import com.reptile.service.IReptile;
 
-@Component
-@EnableScheduling
+//@Component
+//@EnableScheduling
 public class ArticleTask {
 
 	@Autowired
@@ -26,5 +26,16 @@ public class ArticleTask {
 		}
 		
    }
+    
+//   @Scheduled(fixedRate = 1000*4)
+//    public void job2(){
+//
+//		System.out.println(Thread.currentThread().getName());
+//   }
+//    
+//    @Scheduled(fixedRate = 1000*6)
+//    public void job3(){
+//		System.out.println(Thread.currentThread().getName());
+//   }
    
 }

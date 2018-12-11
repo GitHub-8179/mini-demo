@@ -196,7 +196,7 @@ public class Gather {
 		while(true) {
 		
 			document = getHeader(con,ran,urlPath,ipPost,i);
-			if(document==null) {break;}
+			if(document==null) {continue;}
 			Element elements = document.getElementsByClass("news-list").last();
 			if(elements !=null ) {
 				Elements lis = elements.getElementsByTag("li");
@@ -245,6 +245,7 @@ public class Gather {
 			
 			sogouNext = document.getElementById("sogou_next");
 			if(sogouNext==null) {
+				log.info(articleType.getArticleTypeKeyword()+"访问到此结束："+urlPath);
 				break;
 			}else {
 				urlPath = sogouNext.attr("href");
@@ -279,7 +280,8 @@ public class Gather {
         
         con.header("Host", "weixin.sogou.com");
         con.header("Referer", url);
-        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; ppmdig=15443530730000003295079107421ccd971fa389d5e6f03a; sct=15; JSESSIONID=aaaIQXOl_9SDD6V9Lo_Cw");
+//        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; ppmdig=15443530730000003295079107421ccd971fa389d5e6f03a; sct=15; JSESSIONID=aaaIQXOl_9SDD6V9Lo_Cw");
+        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; SUIR=0B47ECD8706A0CFB0559A44C704AEBC9; sct=21; JSESSIONID=aaajt__2Pf9d2eETjK_Cw; ppmdig=15445330070000006c5188cea50d4ab1333d5d5d5e79f32a");
         con.ignoreContentType(true).ignoreHttpErrors(true);
         con.timeout(1000 * 30);
 		con.maxBodySize(0);
@@ -290,6 +292,7 @@ public class Gather {
 			}
 			i++;
 			getHeader(con,ran,url,ipPost,i);
+			log.error(e.toString());
 		}
 		return  document;
 	}
