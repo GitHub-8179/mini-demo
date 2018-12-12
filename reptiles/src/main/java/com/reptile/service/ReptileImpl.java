@@ -42,9 +42,9 @@ public class ReptileImpl implements IReptile{
 		List ipPost = GetIPPost.getIp(3);
 		
 		
-		gather.setData(1,listArticleType.get(1),ipPost);
-		gather.setData(1,listArticleType.get(2),ipPost);
-		gather.setData(1,listArticleType.get(3),ipPost);
+		gather.setData(1,listArticleType.get(7),ipPost);
+//		gather.setData(1,listArticleType.get(2),ipPost);
+//		gather.setData(1,listArticleType.get(3),ipPost);
 
 //		for (ArticleType articleType : listArticleType) {
 //			gather.setData(1,articleType,ipPost);

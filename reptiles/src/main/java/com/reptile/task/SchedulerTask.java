@@ -54,7 +54,6 @@ public class SchedulerTask {
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
 	    	c.andStateEqualTo(0D);
 	    	List<Article> list = articleMapper.selectByExample(example);
-	    	Connection con = null;
 	    	Document document = null;
 	    	ArticleWithBLOBs record = null;
 	    	Element contentDiv = null;
@@ -63,14 +62,23 @@ public class SchedulerTask {
 	    	Random ran = new Random();
 	    	String detailsPath = null;
 	    	int i =0 ;
+	    	String maxInfo ="";
 	    	
 	    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
 	    	for (Article article : list) {
 	    		articleId = article.getArticleId();
 	    		detailsPath = article.getDetailsPath();
 				try {
-					document = Gather.getHeader(con, ran, detailsPath,ipPost,i);
-					if(document==null) {continue;}
+					i=0;
+					document = Gather.getHeader( ran, detailsPath,ipPost,i);
+					maxInfo = document.getElementsByTag("body").text();
+					if(document==null||
+					"Maximum number of open connections reached.".equals(maxInfo)||
+					maxInfo.indexOf("Internal Privoxy Error")!=-1||
+					maxInfo.indexOf("Server dropped connection")!=-1||
+					maxInfo.indexOf("Host Not Found or connection failed")!=-1
+
+					) {continue;}
 					record = new ArticleWithBLOBs();
 					 contentDiv = document.getElementById("img-content");
 					 if(contentDiv==null) {
@@ -85,16 +93,15 @@ public class SchedulerTask {
 					articleMapper.updateByDetails(record);
 					articleId = null;
 					
-					Thread.sleep(ran.nextInt(18000));
+					Thread.sleep(ran.nextInt(2000));
 				} catch (Exception e) {
-					e.printStackTrace();
 					 try {
-						 Thread.sleep(ran.nextInt(18000));
+//						 Thread.sleep(ran.nextInt(18000));
+						 log.error("插入文章链接错误！"+record+":"+e.toString());
 						record.setState(2D);
 						 record.setDetailsDiv(null);
 						 record.setDetailsTxt(null);
 						articleMapper.updateByDetails(record);
-						log.error("插入文章链接错误！"+record+":"+contentTxt);
 					} catch (Exception e1) {
 						log.error("修改文章状态为2错误！！"+record);
 					}

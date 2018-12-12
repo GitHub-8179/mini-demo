@@ -25,7 +25,7 @@ public class GetIPPost {
 				for (int j = 1; j < page; j++) {
 					Connection con=Jsoup.connect("https://www.xicidaili.com/nt/"+j);//获取连接 
 					con.ignoreContentType(true).ignoreHttpErrors(true);
-					con.timeout(1000 * 30);
+					con.timeout(1000 * 20);
 					Document document  = con.get();
 					Elements trs = document.select("tr");
 					org.jsoup.nodes.Element tr = null;
@@ -50,9 +50,6 @@ public class GetIPPost {
 								System.out.println(j+":"+i+"="+tds.get(1).text()+"::"+tds.get(2).text());
 							} catch (Exception e) {
 							}
-						}
-						for (String l : list) {
-							System.out.println(l);
 						}
 					}
 				}

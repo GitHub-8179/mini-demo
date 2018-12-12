@@ -170,12 +170,13 @@ public class Gather {
 
 		StringBuffer url = new StringBuffer(WEB_URL);
 		url.append("?type=2&ie=utf8&s_from=input");
-		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "%26"));
+//		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "%26"));
+		url.append("&query="+articleType.getArticleTypeKeyword());
 //		url.append("&tsn=5");
 //		url.append("&ft=2018-12-01");
 //		url.append("&et=2018-12-09");
-		url.append("&wxid=");
-		url.append("&usip=");
+//		url.append("&wxid=");
+//		url.append("&usip=");
 		url.append("&_sug_type_=");
 		url.append("&_sug_=n");
 		
@@ -190,17 +191,26 @@ public class Gather {
 		 String source = null;
 		 Long createTime = 0L;
 		 String urlPath = url.toString();
-		 Connection con= null;
 		 Document document = null;
 		 int i = 0;
+		 String maxInfo ="";
 		while(true) {
 		
-			document = getHeader(con,ran,urlPath,ipPost,i);
-			if(document==null) {continue;}
+			document = getHeader(ran,urlPath,ipPost,i);
+			maxInfo = document.getElementsByTag("body").text();
+			if(document==null||
+				"Maximum number of open connections reached.".equals(maxInfo)||
+				maxInfo.indexOf("Internal Privoxy Error")!=-1||
+				maxInfo.indexOf("Server dropped connection")!=-1||
+				maxInfo.indexOf("Host Not Found or connection failed")!=-1
+				) {
+				System.out.println(maxInfo);
+				continue;}
 			Element elements = document.getElementsByClass("news-list").last();
 			if(elements !=null ) {
 				Elements lis = elements.getElementsByTag("li");
 				if(lis != null) {
+	
 					for (Element e : lis) {
 						
 						reptileEntity = new ReptileEntity();
@@ -261,19 +271,16 @@ public class Gather {
 	}
 
 
-	public static Document getHeader(Connection con,Random ran,String url,List<String> ipPost,int i) {
+	public static Document getHeader(Random ran,String url,List<String> ipPost,int i) {
 		Document document =null;
 		try {
-		con= Jsoup.connect(url);//获取连接 
+			Connection con= Jsoup.connect(url);//获取连接 
 		
 		con.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
         con.header("Accept-Encoding", "gzip, deflate, br");
         con.header("Accept-Language", "zh-CN,zh;q=0.9");
         con.header("Connection", "keep-alive");
         con.header("Upgrade-Insecure-Requests", "1");
-//        System.setProperty("https.proxySet", "true");
-//        System.getProperties().setProperty("http.proxyHost", r[0]);
-//        System.getProperties().setProperty("http.proxyPort", r[1]);
         String[] sp = ipPost.get(ran.nextInt(ipPost.size())).split(":");
         con.proxy(sp[0], Integer.valueOf(sp[1]));
         con.header("User-Agent", userAgent.get(ran.nextInt(userAgent.size())));
@@ -285,14 +292,17 @@ public class Gather {
         con.ignoreContentType(true).ignoreHttpErrors(true);
         con.timeout(1000 * 30);
 		con.maxBodySize(0);
+		System.setProperty("https.proxySet", "true");
+		System.getProperties().setProperty("http.proxyHost", sp[0]);
+		System.getProperties().setProperty("http.proxyPort", sp[1]);
 			document  = con.get();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			if(i==10) {
 				return null;
 			}
 			i++;
-			getHeader(con,ran,url,ipPost,i);
-			log.error(e.toString());
+			log.error("网络请求异常："+i+e.toString());
+			return getHeader(ran,url,ipPost,i);
 		}
 		return  document;
 	}

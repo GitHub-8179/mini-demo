@@ -1,5 +1,7 @@
 package com.reptile.task;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,28 +16,24 @@ public class ArticleTask {
 
 	@Autowired
 	private IReptile reptileImpl;
+	
+	private volatile List list;
 
-//   @Scheduled(fixedRate = 1000*4)
-    @Scheduled(cron = "0 0 4 * * ?")
+	@Scheduled(initialDelay = 3000,fixedRate = 6000)
     public void job1(){
-	   ReptileEntity reptileEntity = null;
-		try {
-			reptileImpl.insert(reptileEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		list.add("1");
+		System.out.println(Thread.currentThread().getName()+"当前集合数据数："+list.size());
 		
    }
     
-//   @Scheduled(fixedRate = 1000*4)
-//    public void job2(){
-//
-//		System.out.println(Thread.currentThread().getName());
-//   }
-//    
-//    @Scheduled(fixedRate = 1000*6)
-//    public void job3(){
-//		System.out.println(Thread.currentThread().getName());
-//   }
+	@Scheduled(initialDelay = 3000,fixedRate = 2000)
+    public void job2(){
+		System.out.println(Thread.currentThread().getName()+"当前集合数据数："+list.size());
+   }
+    
+	@Scheduled(initialDelay = 3000,fixedRate = 3000)
+    public void job3(){
+		System.out.println(Thread.currentThread().getName()+"当前集合数据数："+list.size());
+   }
    
 }
