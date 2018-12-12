@@ -16,12 +16,14 @@ import org.springframework.stereotype.Component;
 import com.github.pagehelper.PageHelper;
 import com.reptile.dao.ArticleMapper;
 import com.reptile.dao.ArticleTypeMapper;
+import com.reptile.dao.ReptileDao;
 import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
 import com.reptile.entity.ArticleType;
 import com.reptile.entity.ArticleTypeExample;
 import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ArticleWithBLOBs;
+import com.reptile.entity.IpPostEntity;
 import com.reptile.service.Gather;
 import com.reptile.service.IReptile;
 import com.reptile.util.GetIPPost;
@@ -38,16 +40,18 @@ public class SchedulerTask {
 		
 		@Autowired
 		private IReptile reptileImpl;
-		
+		@Autowired
+		private ReptileDao mapper;
 		@Autowired
 		private ArticleTypeMapper articleTypeMapper;
 		
 		@Autowired
 		private Gather gather;
 		
-		public List ipPost;
+//		public List ipPost;
 	 
-	    @Scheduled(cron = "${TASK_TIME}")
+//	    @Scheduled(cron = "${TASK_TIME}")
+	    @Scheduled(initialDelay = 10000,fixedRate = 1000*60)
 	    public void job2(){
 	    	PageHelper.startPage(1, 10);
 	    	ArticleExample example = new ArticleExample();
@@ -64,8 +68,10 @@ public class SchedulerTask {
 	    	int i =0 ;
 	    	String maxInfo ="";
 	    	
-	    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
+//	    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
+	    	List<IpPostEntity> ipPost = null;
 	    	for (Article article : list) {
+	    		ipPost = mapper.selectIpPost(null);
 	    		articleId = article.getArticleId();
 	    		detailsPath = article.getDetailsPath();
 				try {
@@ -73,6 +79,8 @@ public class SchedulerTask {
 					document = Gather.getHeader( ran, detailsPath,ipPost,i);
 					maxInfo = document.getElementsByTag("body").text();
 					if(document==null||
+					"".equals(maxInfo)||
+					maxInfo.startsWith("Not Found")||
 					"Maximum number of open connections reached.".equals(maxInfo)||
 					maxInfo.indexOf("Internal Privoxy Error")!=-1||
 					maxInfo.indexOf("Server dropped connection")!=-1||
@@ -111,7 +119,8 @@ public class SchedulerTask {
 	    }
 
 	    
-	    @Scheduled(cron = "${ArticleTask}")
+//	    @Scheduled(cron = "${ArticleTask}")
+	    @Scheduled(cron = "0 30 4 * * ?")
 	    public void job1(){
 		   try {
 			   ArticleTypeExample example = new ArticleTypeExample();
@@ -119,10 +128,15 @@ public class SchedulerTask {
 				c.andParentidNotEqualTo(0);
 				List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
 					
-		    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
-				
+		    	List<IpPostEntity> ipPost = mapper.selectIpPost(null);
+
+//		    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
+				int i = 0;
 				for (ArticleType articleType : listArticleType) {
-					gather.setData(1,articleType,ipPost);
+					if(i>11) {
+						gather.setData(1,articleType,ipPost);
+					}
+					i++;
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -132,7 +146,7 @@ public class SchedulerTask {
 	   @Scheduled(cron = "${setIpPost}")
 	    public void setIpPost(){
 		   try {
-			    ipPost = GetIPPost.getIp(6);
+//			    ipPost = GetIPPost.getIp(6);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

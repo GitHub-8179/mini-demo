@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import com.reptile.dao.ReptileDao;
 import com.reptile.entity.ArticleType;
+import com.reptile.entity.IpPostEntity;
 import com.reptile.entity.ReptileEntity;
 
 @Service
@@ -166,7 +167,7 @@ public class Gather {
 	}
 	
 	
-	public void setData(int contentType,ArticleType articleType,List<String> ipPost) throws Exception {
+	public void setData(int contentType,ArticleType articleType,List<IpPostEntity> ipPost) throws Exception {
 
 		StringBuffer url = new StringBuffer(WEB_URL);
 		url.append("?type=2&ie=utf8&s_from=input");
@@ -177,6 +178,7 @@ public class Gather {
 //		url.append("&et=2018-12-09");
 //		url.append("&wxid=");
 //		url.append("&usip=");
+		url.append("&page=#;#;");
 		url.append("&_sug_type_=");
 		url.append("&_sug_=n");
 		
@@ -194,12 +196,17 @@ public class Gather {
 		 Document document = null;
 		 int i = 0;
 		 String maxInfo ="";
-		while(true) {
-		
+		 int j = 1;
+		 for (int j2 = 1; j2 < 100; j2++) {
+			
+//		while(true) {
+			 urlPath = url.toString().replace("#;#;",j2+"");
 			document = getHeader(ran,urlPath,ipPost,i);
 			maxInfo = document.getElementsByTag("body").text();
 			if(document==null||
 				"Maximum number of open connections reached.".equals(maxInfo)||
+				"".equals(maxInfo)||
+				maxInfo.startsWith("Not Found")||
 				maxInfo.indexOf("Internal Privoxy Error")!=-1||
 				maxInfo.indexOf("Server dropped connection")!=-1||
 				maxInfo.indexOf("Host Not Found or connection failed")!=-1
@@ -252,17 +259,16 @@ public class Gather {
 				}
 				
 			}
-			
-			sogouNext = document.getElementById("sogou_next");
-			if(sogouNext==null) {
-				log.info(articleType.getArticleTypeKeyword()+"访问到此结束："+urlPath);
-				break;
-			}else {
-				urlPath = sogouNext.attr("href");
-				urlPath= WEB_URL +urlPath;
-				sogouNext = null;
-			}
-			log.info("访问地址："+urlPath);
+//			sogouNext = document.getElementById("sogou_next");
+//			if(sogouNext==null) {
+//				log.info(articleType.getArticleTypeKeyword()+"访问到此结束："+urlPath);
+//				break;
+//			}else {
+//				urlPath = sogouNext.attr("href");
+//				urlPath= WEB_URL +urlPath;
+//				sogouNext = null;
+//			}
+			log.info("访问地址："+urlPath+"——长度："+maxInfo.length());
 			Thread.sleep(ran.nextInt(100000));
 
 		}
@@ -271,7 +277,7 @@ public class Gather {
 	}
 
 
-	public static Document getHeader(Random ran,String url,List<String> ipPost,int i) {
+	public static Document getHeader(Random ran,String url,List<IpPostEntity> ipPost,int i) {
 		Document document =null;
 		try {
 			Connection con= Jsoup.connect(url);//获取连接 
@@ -281,8 +287,9 @@ public class Gather {
         con.header("Accept-Language", "zh-CN,zh;q=0.9");
         con.header("Connection", "keep-alive");
         con.header("Upgrade-Insecure-Requests", "1");
-        String[] sp = ipPost.get(ran.nextInt(ipPost.size())).split(":");
-        con.proxy(sp[0], Integer.valueOf(sp[1]));
+//        String[] sp = ipPost.get(ran.nextInt(ipPost.size())).split(":");
+        IpPostEntity sp = ipPost.get(ran.nextInt(ipPost.size()));
+        con.proxy(sp.getIp(), sp.getPost());
         con.header("User-Agent", userAgent.get(ran.nextInt(userAgent.size())));
         
         con.header("Host", "weixin.sogou.com");
@@ -293,8 +300,8 @@ public class Gather {
         con.timeout(1000 * 30);
 		con.maxBodySize(0);
 		System.setProperty("https.proxySet", "true");
-		System.getProperties().setProperty("http.proxyHost", sp[0]);
-		System.getProperties().setProperty("http.proxyPort", sp[1]);
+		System.getProperties().setProperty("http.proxyHost", sp.getIp());
+		System.getProperties().setProperty("http.proxyPort", sp.getPost()+"");
 			document  = con.get();
 		} catch (Exception e) {
 			if(i==10) {

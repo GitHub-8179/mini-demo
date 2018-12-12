@@ -39,10 +39,11 @@ public class ReptileImpl implements IReptile{
 		c.andParentidNotEqualTo(0);
 		List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
 			
-		List ipPost = GetIPPost.getIp(3);
+//		List ipPost = GetIPPost.getIp(3);
 		
-		
-		gather.setData(1,listArticleType.get(7),ipPost);
+		List ipPost =mapper.selectIpPost(null);
+		System.out.println(ipPost.size());
+		gather.setData(1,listArticleType.get(9),ipPost);
 //		gather.setData(1,listArticleType.get(2),ipPost);
 //		gather.setData(1,listArticleType.get(3),ipPost);
 

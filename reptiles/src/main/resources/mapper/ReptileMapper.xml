@@ -10,6 +10,11 @@
     <result column="ACTIVITY_TYPE" jdbcType="VARCHAR" property="activityType" /> -->
   </resultMap>
   
+  <resultMap id="IpPostEntitytMap" type="com.reptile.entity.IpPostEntity">
+    <id column="IP" jdbcType="VARCHAR" property="ip" />
+    <id column="post" jdbcType="INTEGER" property="post" />
+  </resultMap>
+  
 
   <insert id="insert" parameterType="com.reptile.entity.ReptileEntity">
     INSERT INTO article1 (
@@ -62,5 +67,19 @@
             ,#{item.articleKeyword},#{item.source},#{item.contentType},#{item.articleTypeId} ,#{item.contentExcerpt}  )
         </foreach>
     </insert>
+    
+    
+     <insert id="insertsIpPost" parameterType="com.reptile.entity.IpPostEntity">
+      INSERT ip_post (ip,post,creat_time,STATE) VALUES(
+		 #{ip},#{post},now(),#{state}
+		)ON DUPLICATE KEY UPDATE creat_time = now(),STATE=#{state}
+    </insert>
+    
+    
+     <select id="selectIpPost" parameterType="com.reptile.entity.IpPostEntity" resultMap="IpPostEntitytMap">
+
+		SELECT ip,post FROM ip_post WHERE STATE=1
+		
+	  </select>
  
 </mapper>
