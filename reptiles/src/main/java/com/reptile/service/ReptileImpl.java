@@ -13,6 +13,7 @@ import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
 import com.reptile.entity.ArticleType;
 import com.reptile.entity.ArticleTypeExample;
+import com.reptile.entity.IpPostEntity;
 import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ReptileEntity;
 import com.reptile.util.GetIPPost;
@@ -41,15 +42,13 @@ public class ReptileImpl implements IReptile{
 			
 //		List ipPost = GetIPPost.getIp(3);
 		
-		List ipPost =mapper.selectIpPost(null);
-		System.out.println(ipPost.size());
-		gather.setData(1,listArticleType.get(9),ipPost);
-//		gather.setData(1,listArticleType.get(2),ipPost);
-//		gather.setData(1,listArticleType.get(3),ipPost);
+		IpPostEntity ipPostEntity = new IpPostEntity();
+		ipPostEntity.setState(1);
+		List ipPost =mapper.selectIpPost(ipPostEntity);
 
-//		for (ArticleType articleType : listArticleType) {
-//			gather.setData(1,articleType,ipPost);
-//		}
+		for (ArticleType articleType : listArticleType) {
+			gather.setData(1,articleType,ipPost);
+		}
 		
 		return 0;
 	}

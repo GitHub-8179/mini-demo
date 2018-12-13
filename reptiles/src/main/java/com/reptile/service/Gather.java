@@ -202,17 +202,22 @@ public class Gather {
 //		while(true) {
 			 urlPath = url.toString().replace("#;#;",j2+"");
 			document = getHeader(ran,urlPath,ipPost,i);
-			maxInfo = document.getElementsByTag("body").text();
-			if(document==null||
-				"Maximum number of open connections reached.".equals(maxInfo)||
-				"".equals(maxInfo)||
-				maxInfo.startsWith("Not Found")||
-				maxInfo.indexOf("Internal Privoxy Error")!=-1||
-				maxInfo.indexOf("Server dropped connection")!=-1||
-				maxInfo.indexOf("Host Not Found or connection failed")!=-1
-				) {
-				System.out.println(maxInfo);
-				continue;}
+			if(document!=null) {
+				maxInfo = document.getElementsByTag("body").text();
+				if(maxInfo==null||
+						"Maximum number of open connections reached.".equals(maxInfo)||
+						"".equals(maxInfo)||
+						maxInfo.startsWith("Not Found")||
+						maxInfo.indexOf("Internal Privoxy Error")!=-1||
+						maxInfo.indexOf("Server dropped connection")!=-1||
+						maxInfo.indexOf("Host Not Found or connection failed")!=-1
+						) {
+					j--;
+					continue;}
+			}else {
+				j--;
+				continue;
+			}
 			Element elements = document.getElementsByClass("news-list").last();
 			if(elements !=null ) {
 				Elements lis = elements.getElementsByTag("li");
@@ -308,7 +313,8 @@ public class Gather {
 				return null;
 			}
 			i++;
-			log.error("网络请求异常："+i+e.toString());
+			log.error("网络请求异常："+i+"次处理中........网络请求异常地址："+url);
+
 			return getHeader(ran,url,ipPost,i);
 		}
 		return  document;

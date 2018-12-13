@@ -185,52 +185,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdEqualTo(Double value) {
+        public Criteria andArticleTypeIdEqualTo(Integer value) {
             addCriterion("article_type_id =", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdNotEqualTo(Double value) {
+        public Criteria andArticleTypeIdNotEqualTo(Integer value) {
             addCriterion("article_type_id <>", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdGreaterThan(Double value) {
+        public Criteria andArticleTypeIdGreaterThan(Integer value) {
             addCriterion("article_type_id >", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdGreaterThanOrEqualTo(Double value) {
+        public Criteria andArticleTypeIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("article_type_id >=", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdLessThan(Double value) {
+        public Criteria andArticleTypeIdLessThan(Integer value) {
             addCriterion("article_type_id <", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdLessThanOrEqualTo(Double value) {
+        public Criteria andArticleTypeIdLessThanOrEqualTo(Integer value) {
             addCriterion("article_type_id <=", value, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdIn(List<Double> values) {
+        public Criteria andArticleTypeIdIn(List<Integer> values) {
             addCriterion("article_type_id in", values, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdNotIn(List<Double> values) {
+        public Criteria andArticleTypeIdNotIn(List<Integer> values) {
             addCriterion("article_type_id not in", values, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdBetween(Double value1, Double value2) {
+        public Criteria andArticleTypeIdBetween(Integer value1, Integer value2) {
             addCriterion("article_type_id between", value1, value2, "articleTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andArticleTypeIdNotBetween(Double value1, Double value2) {
+        public Criteria andArticleTypeIdNotBetween(Integer value1, Integer value2) {
             addCriterion("article_type_id not between", value1, value2, "articleTypeId");
             return (Criteria) this;
         }
@@ -645,52 +645,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andShareCountEqualTo(Double value) {
+        public Criteria andShareCountEqualTo(Integer value) {
             addCriterion("share_count =", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountNotEqualTo(Double value) {
+        public Criteria andShareCountNotEqualTo(Integer value) {
             addCriterion("share_count <>", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountGreaterThan(Double value) {
+        public Criteria andShareCountGreaterThan(Integer value) {
             addCriterion("share_count >", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountGreaterThanOrEqualTo(Double value) {
+        public Criteria andShareCountGreaterThanOrEqualTo(Integer value) {
             addCriterion("share_count >=", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountLessThan(Double value) {
+        public Criteria andShareCountLessThan(Integer value) {
             addCriterion("share_count <", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountLessThanOrEqualTo(Double value) {
+        public Criteria andShareCountLessThanOrEqualTo(Integer value) {
             addCriterion("share_count <=", value, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountIn(List<Double> values) {
+        public Criteria andShareCountIn(List<Integer> values) {
             addCriterion("share_count in", values, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountNotIn(List<Double> values) {
+        public Criteria andShareCountNotIn(List<Integer> values) {
             addCriterion("share_count not in", values, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountBetween(Double value1, Double value2) {
+        public Criteria andShareCountBetween(Integer value1, Integer value2) {
             addCriterion("share_count between", value1, value2, "shareCount");
             return (Criteria) this;
         }
 
-        public Criteria andShareCountNotBetween(Double value1, Double value2) {
+        public Criteria andShareCountNotBetween(Integer value1, Integer value2) {
             addCriterion("share_count not between", value1, value2, "shareCount");
             return (Criteria) this;
         }
@@ -705,52 +705,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountEqualTo(Double value) {
+        public Criteria andCollectCountEqualTo(Integer value) {
             addCriterion("collect_count =", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountNotEqualTo(Double value) {
+        public Criteria andCollectCountNotEqualTo(Integer value) {
             addCriterion("collect_count <>", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountGreaterThan(Double value) {
+        public Criteria andCollectCountGreaterThan(Integer value) {
             addCriterion("collect_count >", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountGreaterThanOrEqualTo(Double value) {
+        public Criteria andCollectCountGreaterThanOrEqualTo(Integer value) {
             addCriterion("collect_count >=", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountLessThan(Double value) {
+        public Criteria andCollectCountLessThan(Integer value) {
             addCriterion("collect_count <", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountLessThanOrEqualTo(Double value) {
+        public Criteria andCollectCountLessThanOrEqualTo(Integer value) {
             addCriterion("collect_count <=", value, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountIn(List<Double> values) {
+        public Criteria andCollectCountIn(List<Integer> values) {
             addCriterion("collect_count in", values, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountNotIn(List<Double> values) {
+        public Criteria andCollectCountNotIn(List<Integer> values) {
             addCriterion("collect_count not in", values, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountBetween(Double value1, Double value2) {
+        public Criteria andCollectCountBetween(Integer value1, Integer value2) {
             addCriterion("collect_count between", value1, value2, "collectCount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectCountNotBetween(Double value1, Double value2) {
+        public Criteria andCollectCountNotBetween(Integer value1, Integer value2) {
             addCriterion("collect_count not between", value1, value2, "collectCount");
             return (Criteria) this;
         }
@@ -765,52 +765,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountEqualTo(Double value) {
+        public Criteria andCollectInitcountEqualTo(Integer value) {
             addCriterion("collect_initcount =", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountNotEqualTo(Double value) {
+        public Criteria andCollectInitcountNotEqualTo(Integer value) {
             addCriterion("collect_initcount <>", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountGreaterThan(Double value) {
+        public Criteria andCollectInitcountGreaterThan(Integer value) {
             addCriterion("collect_initcount >", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountGreaterThanOrEqualTo(Double value) {
+        public Criteria andCollectInitcountGreaterThanOrEqualTo(Integer value) {
             addCriterion("collect_initcount >=", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountLessThan(Double value) {
+        public Criteria andCollectInitcountLessThan(Integer value) {
             addCriterion("collect_initcount <", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountLessThanOrEqualTo(Double value) {
+        public Criteria andCollectInitcountLessThanOrEqualTo(Integer value) {
             addCriterion("collect_initcount <=", value, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountIn(List<Double> values) {
+        public Criteria andCollectInitcountIn(List<Integer> values) {
             addCriterion("collect_initcount in", values, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountNotIn(List<Double> values) {
+        public Criteria andCollectInitcountNotIn(List<Integer> values) {
             addCriterion("collect_initcount not in", values, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountBetween(Double value1, Double value2) {
+        public Criteria andCollectInitcountBetween(Integer value1, Integer value2) {
             addCriterion("collect_initcount between", value1, value2, "collectInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andCollectInitcountNotBetween(Double value1, Double value2) {
+        public Criteria andCollectInitcountNotBetween(Integer value1, Integer value2) {
             addCriterion("collect_initcount not between", value1, value2, "collectInitcount");
             return (Criteria) this;
         }
@@ -825,52 +825,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountEqualTo(Double value) {
+        public Criteria andShareInitcountEqualTo(Integer value) {
             addCriterion("share_initcount =", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountNotEqualTo(Double value) {
+        public Criteria andShareInitcountNotEqualTo(Integer value) {
             addCriterion("share_initcount <>", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountGreaterThan(Double value) {
+        public Criteria andShareInitcountGreaterThan(Integer value) {
             addCriterion("share_initcount >", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountGreaterThanOrEqualTo(Double value) {
+        public Criteria andShareInitcountGreaterThanOrEqualTo(Integer value) {
             addCriterion("share_initcount >=", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountLessThan(Double value) {
+        public Criteria andShareInitcountLessThan(Integer value) {
             addCriterion("share_initcount <", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountLessThanOrEqualTo(Double value) {
+        public Criteria andShareInitcountLessThanOrEqualTo(Integer value) {
             addCriterion("share_initcount <=", value, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountIn(List<Double> values) {
+        public Criteria andShareInitcountIn(List<Integer> values) {
             addCriterion("share_initcount in", values, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountNotIn(List<Double> values) {
+        public Criteria andShareInitcountNotIn(List<Integer> values) {
             addCriterion("share_initcount not in", values, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountBetween(Double value1, Double value2) {
+        public Criteria andShareInitcountBetween(Integer value1, Integer value2) {
             addCriterion("share_initcount between", value1, value2, "shareInitcount");
             return (Criteria) this;
         }
 
-        public Criteria andShareInitcountNotBetween(Double value1, Double value2) {
+        public Criteria andShareInitcountNotBetween(Integer value1, Integer value2) {
             addCriterion("share_initcount not between", value1, value2, "shareInitcount");
             return (Criteria) this;
         }
@@ -885,52 +885,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeEqualTo(Double value) {
+        public Criteria andContentTypeEqualTo(Integer value) {
             addCriterion("content_type =", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeNotEqualTo(Double value) {
+        public Criteria andContentTypeNotEqualTo(Integer value) {
             addCriterion("content_type <>", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeGreaterThan(Double value) {
+        public Criteria andContentTypeGreaterThan(Integer value) {
             addCriterion("content_type >", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeGreaterThanOrEqualTo(Double value) {
+        public Criteria andContentTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("content_type >=", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeLessThan(Double value) {
+        public Criteria andContentTypeLessThan(Integer value) {
             addCriterion("content_type <", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeLessThanOrEqualTo(Double value) {
+        public Criteria andContentTypeLessThanOrEqualTo(Integer value) {
             addCriterion("content_type <=", value, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeIn(List<Double> values) {
+        public Criteria andContentTypeIn(List<Integer> values) {
             addCriterion("content_type in", values, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeNotIn(List<Double> values) {
+        public Criteria andContentTypeNotIn(List<Integer> values) {
             addCriterion("content_type not in", values, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeBetween(Double value1, Double value2) {
+        public Criteria andContentTypeBetween(Integer value1, Integer value2) {
             addCriterion("content_type between", value1, value2, "contentType");
             return (Criteria) this;
         }
 
-        public Criteria andContentTypeNotBetween(Double value1, Double value2) {
+        public Criteria andContentTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("content_type not between", value1, value2, "contentType");
             return (Criteria) this;
         }
@@ -1015,52 +1015,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountEqualTo(Double value) {
+        public Criteria andContentReadcountEqualTo(Integer value) {
             addCriterion("content_readcount =", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountNotEqualTo(Double value) {
+        public Criteria andContentReadcountNotEqualTo(Integer value) {
             addCriterion("content_readcount <>", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountGreaterThan(Double value) {
+        public Criteria andContentReadcountGreaterThan(Integer value) {
             addCriterion("content_readcount >", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountGreaterThanOrEqualTo(Double value) {
+        public Criteria andContentReadcountGreaterThanOrEqualTo(Integer value) {
             addCriterion("content_readcount >=", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountLessThan(Double value) {
+        public Criteria andContentReadcountLessThan(Integer value) {
             addCriterion("content_readcount <", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountLessThanOrEqualTo(Double value) {
+        public Criteria andContentReadcountLessThanOrEqualTo(Integer value) {
             addCriterion("content_readcount <=", value, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountIn(List<Double> values) {
+        public Criteria andContentReadcountIn(List<Integer> values) {
             addCriterion("content_readcount in", values, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountNotIn(List<Double> values) {
+        public Criteria andContentReadcountNotIn(List<Integer> values) {
             addCriterion("content_readcount not in", values, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountBetween(Double value1, Double value2) {
+        public Criteria andContentReadcountBetween(Integer value1, Integer value2) {
             addCriterion("content_readcount between", value1, value2, "contentReadcount");
             return (Criteria) this;
         }
 
-        public Criteria andContentReadcountNotBetween(Double value1, Double value2) {
+        public Criteria andContentReadcountNotBetween(Integer value1, Integer value2) {
             addCriterion("content_readcount not between", value1, value2, "contentReadcount");
             return (Criteria) this;
         }
@@ -1215,52 +1215,52 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andStateEqualTo(Double value) {
+        public Criteria andStateEqualTo(Integer value) {
             addCriterion("state =", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotEqualTo(Double value) {
+        public Criteria andStateNotEqualTo(Integer value) {
             addCriterion("state <>", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateGreaterThan(Double value) {
+        public Criteria andStateGreaterThan(Integer value) {
             addCriterion("state >", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateGreaterThanOrEqualTo(Double value) {
+        public Criteria andStateGreaterThanOrEqualTo(Integer value) {
             addCriterion("state >=", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateLessThan(Double value) {
+        public Criteria andStateLessThan(Integer value) {
             addCriterion("state <", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateLessThanOrEqualTo(Double value) {
+        public Criteria andStateLessThanOrEqualTo(Integer value) {
             addCriterion("state <=", value, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateIn(List<Double> values) {
+        public Criteria andStateIn(List<Integer> values) {
             addCriterion("state in", values, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotIn(List<Double> values) {
+        public Criteria andStateNotIn(List<Integer> values) {
             addCriterion("state not in", values, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateBetween(Double value1, Double value2) {
+        public Criteria andStateBetween(Integer value1, Integer value2) {
             addCriterion("state between", value1, value2, "state");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotBetween(Double value1, Double value2) {
+        public Criteria andStateNotBetween(Integer value1, Integer value2) {
             addCriterion("state not between", value1, value2, "state");
             return (Criteria) this;
         }

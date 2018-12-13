@@ -12,6 +12,8 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +27,8 @@ import com.reptile.service.IReptile;
 @Component
 @EnableScheduling
 public class ArticleTask {
+
+	private static final Logger log = LoggerFactory.getLogger(ArticleTask.class);
 
 	@Autowired
 	private IReptile reptileImpl;
@@ -47,9 +51,11 @@ public class ArticleTask {
 //   }
     
 //	@Scheduled(initialDelay = 3000)
-	 @Scheduled(cron = "0 0 4 * * ?")
+//	 @Scheduled(cron = "0 0 4 * * ?")
+	@Scheduled(cron = "${setIpPost}")
     public void job3(){
-		List<IpPostEntity> l = mapper.selectIpPost(null);
+		 IpPostEntity ipPostEntity = new IpPostEntity();
+		List<IpPostEntity> l = mapper.selectIpPost(ipPostEntity);
 		for (IpPostEntity i : l) {
 			try {
 				connect(i.getIp(),i.getPost());
@@ -61,7 +67,11 @@ public class ArticleTask {
 			}
 		}
 		
-		System.out.println(Thread.currentThread().getName()+"当前集合数据数："+l.size());
+		ipPostEntity.setState(1);
+		l = mapper.selectIpPost(ipPostEntity);
+
+		log.info("刷新IP成功，当前IP数量："+l.size());
+		
    }
    
 	

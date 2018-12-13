@@ -5,7 +5,7 @@ import java.util.Date;
 public class Article {
     private String articleId;
 
-    private Double articleTypeId;
+    private Integer articleTypeId;
 
     private String articleTitle;
 
@@ -19,25 +19,25 @@ public class Article {
 
     private String source;
 
-    private Double shareCount;
+    private Integer shareCount;
 
-    private Double collectCount;
+    private Integer collectCount;
 
-    private Double collectInitcount;
+    private Integer collectInitcount;
 
-    private Double shareInitcount;
+    private Integer shareInitcount;
 
-    private Double contentType;
+    private Integer contentType;
 
     private String contentManual;
 
-    private Double contentReadcount;
+    private Integer contentReadcount;
 
     private String contentExcerpt;
 
     private String imagePath;
 
-    private Double state;
+    private Integer state;
 
     private String detailsPath;
 
@@ -49,13 +49,6 @@ public class Article {
         this.articleId = articleId == null ? null : articleId.trim();
     }
 
-    public Double getArticleTypeId() {
-        return articleTypeId;
-    }
-
-    public void setArticleTypeId(Double articleTypeId) {
-        this.articleTypeId = articleTypeId;
-    }
 
     public String getArticleTitle() {
         return articleTitle;
@@ -105,45 +98,39 @@ public class Article {
         this.source = source == null ? null : source.trim();
     }
 
-    public Double getShareCount() {
-        return shareCount;
-    }
 
-    public void setShareCount(Double shareCount) {
-        this.shareCount = shareCount;
-    }
+    public Integer getArticleTypeId() {
+		return articleTypeId;
+	}
 
-    public Double getCollectCount() {
-        return collectCount;
-    }
+	public void setArticleTypeId(Integer articleTypeId) {
+		this.articleTypeId = articleTypeId;
+	}
 
-    public void setCollectCount(Double collectCount) {
-        this.collectCount = collectCount;
-    }
+	public Integer getShareCount() {
+		return shareCount;
+	}
 
-    public Double getCollectInitcount() {
-        return collectInitcount;
-    }
+	public void setShareCount(Integer shareCount) {
+		this.shareCount = shareCount;
+	}
 
-    public void setCollectInitcount(Double collectInitcount) {
-        this.collectInitcount = collectInitcount;
-    }
+	public Integer getCollectCount() {
+		return collectCount;
+	}
 
-    public Double getShareInitcount() {
-        return shareInitcount;
-    }
+	public void setCollectCount(Integer collectCount) {
+		this.collectCount = collectCount;
+	}
 
-    public void setShareInitcount(Double shareInitcount) {
-        this.shareInitcount = shareInitcount;
-    }
+	public Integer getCollectInitcount() {
+		return collectInitcount;
+	}
 
-    public Double getContentType() {
-        return contentType;
-    }
+	public void setCollectInitcount(Integer collectInitcount) {
+		this.collectInitcount = collectInitcount;
+	}
 
-    public void setContentType(Double contentType) {
-        this.contentType = contentType;
-    }
 
     public String getContentManual() {
         return contentManual;
@@ -153,13 +140,6 @@ public class Article {
         this.contentManual = contentManual == null ? null : contentManual.trim();
     }
 
-    public Double getContentReadcount() {
-        return contentReadcount;
-    }
-
-    public void setContentReadcount(Double contentReadcount) {
-        this.contentReadcount = contentReadcount;
-    }
 
     public String getContentExcerpt() {
         return contentExcerpt;
@@ -177,15 +157,40 @@ public class Article {
         this.imagePath = imagePath == null ? null : imagePath.trim();
     }
 
-    public Double getState() {
-        return state;
-    }
 
-    public void setState(Double state) {
-        this.state = state;
-    }
+    public Integer getShareInitcount() {
+		return shareInitcount;
+	}
 
-    public String getDetailsPath() {
+	public void setShareInitcount(Integer shareInitcount) {
+		this.shareInitcount = shareInitcount;
+	}
+
+	public Integer getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(Integer contentType) {
+		this.contentType = contentType;
+	}
+
+	public Integer getContentReadcount() {
+		return contentReadcount;
+	}
+
+	public void setContentReadcount(Integer contentReadcount) {
+		this.contentReadcount = contentReadcount;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public String getDetailsPath() {
         return detailsPath;
     }
 

@@ -55,6 +55,7 @@
 	CONTENT_TYPE = #{contentType},
 	ARTICLE_TYPE_ID = #{articleTypeId},
 	DETAILS_PATH = #{detailsPath},
+	STATE=IF(details_div IS NULL, 0, 1),
 	CONTENT_EXCERPT = #{contentExcerpt} 
 
   </insert>
@@ -78,7 +79,12 @@
     
      <select id="selectIpPost" parameterType="com.reptile.entity.IpPostEntity" resultMap="IpPostEntitytMap">
 
-		SELECT ip,post FROM ip_post WHERE STATE=1
+		SELECT ip,post FROM ip_post 
+		<where>
+			<if test="state != null">
+				STATE=#{state}
+	    	</if>
+		</where>
 		
 	  </select>
  

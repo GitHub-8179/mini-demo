@@ -1,5 +1,6 @@
 package com.reptile.task;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -50,13 +51,13 @@ public class SchedulerTask {
 		
 //		public List ipPost;
 	 
-//	    @Scheduled(cron = "${TASK_TIME}")
-	    @Scheduled(initialDelay = 10000,fixedRate = 1000*60)
+	    @Scheduled(cron = "${TASK_TIME}")
+//	    @Scheduled(initialDelay = 10000,fixedRate = 1000*60)
 	    public void job2(){
 	    	PageHelper.startPage(1, 10);
 	    	ArticleExample example = new ArticleExample();
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
-	    	c.andStateEqualTo(0D);
+	    	c.andStateEqualTo(0);
 	    	List<Article> list = articleMapper.selectByExample(example);
 	    	Document document = null;
 	    	ArticleWithBLOBs record = null;
@@ -70,43 +71,50 @@ public class SchedulerTask {
 	    	
 //	    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
 	    	List<IpPostEntity> ipPost = null;
+	    	if(list!=null&&list.size()>0) {
+	    		IpPostEntity ipPostEntity = new IpPostEntity();
+	    		ipPostEntity.setState(1);
+	    		ipPost = mapper.selectIpPost(ipPostEntity);
+	    	}
 	    	for (Article article : list) {
-	    		ipPost = mapper.selectIpPost(null);
 	    		articleId = article.getArticleId();
 	    		detailsPath = article.getDetailsPath();
 				try {
 					i=0;
 					document = Gather.getHeader( ran, detailsPath,ipPost,i);
-					maxInfo = document.getElementsByTag("body").text();
-					if(document==null||
-					"".equals(maxInfo)||
-					maxInfo.startsWith("Not Found")||
-					"Maximum number of open connections reached.".equals(maxInfo)||
-					maxInfo.indexOf("Internal Privoxy Error")!=-1||
-					maxInfo.indexOf("Server dropped connection")!=-1||
-					maxInfo.indexOf("Host Not Found or connection failed")!=-1
-
-					) {continue;}
+					if(document!=null) {
+						maxInfo = document.getElementsByTag("body").text();
+						if(maxInfo==null||"Maximum number of open connections reached.".equals(maxInfo)||
+								"".equals(maxInfo)||
+								maxInfo.startsWith("Not Found")||
+								maxInfo.indexOf("Internal Privoxy Error")!=-1||
+								maxInfo.indexOf("Server dropped connection")!=-1||
+								maxInfo.indexOf("Host Not Found or connection failed")!=-1
+								) {
+							continue;}
+					}else {
+						continue;
+					}
 					record = new ArticleWithBLOBs();
 					 contentDiv = document.getElementById("img-content");
 					 if(contentDiv==null) {
-						 record.setState(2D);
+						 record.setState(2);
 					 }else {
 						 contentTxt = contentDiv.text();
 						 record.setDetailsDiv(contentDiv.toString().getBytes());
 						 record.setDetailsTxt(contentTxt.getBytes());
-						 record.setState(1D);
+						 record.setState(1);
 					 }
 					 record.setArticleId(articleId);
 					articleMapper.updateByDetails(record);
 					articleId = null;
 					
-					Thread.sleep(ran.nextInt(2000));
+//					Thread.sleep(ran.nextInt(2000));
 				} catch (Exception e) {
 					 try {
 //						 Thread.sleep(ran.nextInt(18000));
 						 log.error("插入文章链接错误！"+record+":"+e.toString());
-						record.setState(2D);
+						record.setState(2);
 						 record.setDetailsDiv(null);
 						 record.setDetailsTxt(null);
 						articleMapper.updateByDetails(record);
@@ -119,37 +127,37 @@ public class SchedulerTask {
 	    }
 
 	    
-//	    @Scheduled(cron = "${ArticleTask}")
-	    @Scheduled(cron = "0 30 4 * * ?")
+	    @Scheduled(cron = "${ArticleTask}")
+//	    @Scheduled(cron = "0 30 4 * * ?")
 	    public void job1(){
 		   try {
 			   ArticleTypeExample example = new ArticleTypeExample();
-				Criteria c  = example.createCriteria();
-				c.andParentidNotEqualTo(0);
+				Criteria cl  = example.createCriteria();
+				cl.andParentidNotEqualTo(0);
 				List<ArticleType> listArticleType = articleTypeMapper.selectByExample(example);
-					
-		    	List<IpPostEntity> ipPost = mapper.selectIpPost(null);
+				
+	    		IpPostEntity ipPostEntity = new IpPostEntity();
+	    		ipPostEntity.setState(1);
+		    	List<IpPostEntity> ipPost = mapper.selectIpPost(ipPostEntity);
+
+		    	Calendar cld = Calendar.getInstance();//可以对每个时间域单独修改
+//		    	int year = cld.get(Calendar.YEAR);
+//		    	int month = cld.get(Calendar.MONTH);
+//		    	int date = cld.get(Calendar.DATE);
+//		    	int minute = c.get(Calendar.MINUTE)
+//		    	int second = c.get(Calendar.SECOND)
+		    	int hour = cld.get(Calendar.HOUR_OF_DAY);
+		    	if(hour<listArticleType.size()) {
+		    		gather.setData(1,listArticleType.get(hour),ipPost);
+		    	}
 
 //		    	if(ipPost==null||ipPost.size()==0) {ipPost = GetIPPost.getIp(6);}
-				int i = 0;
-				for (ArticleType articleType : listArticleType) {
-					if(i>11) {
-						gather.setData(1,articleType,ipPost);
-					}
-					i++;
-				}
+//				for (ArticleType articleType : listArticleType) {
+//					gather.setData(1,articleType,ipPost);
+//				}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	    }
 		   
-	   @Scheduled(cron = "${setIpPost}")
-	    public void setIpPost(){
-		   try {
-//			    ipPost = GetIPPost.getIp(6);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	   }
-	   
 }
