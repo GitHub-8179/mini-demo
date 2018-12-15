@@ -15,8 +15,13 @@ public interface ArticleMapper {
     int insertSelective(ArticleWithBLOBs record);
 
     List<ArticleWithBLOBs> selectByExampleWithBLOBs(ArticleExample example);
+    
+    List<ArticleWithBLOBs> selectaData(ArticleExample example);
 
     List<Article> selectByExample(ArticleExample example);
+    
+    int updateDataState(List<String> list);
+
 
     int updateByExampleSelective(@Param("record") ArticleWithBLOBs record, @Param("example") ArticleExample example);
 

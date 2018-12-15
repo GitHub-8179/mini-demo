@@ -1,5 +1,9 @@
 package com.reptile.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,5 +36,22 @@ public class ReptileController {
 		}
     	
 		return 0;
+	}
+	
+	
+//	@PostMapping("/insert")
+	@GetMapping("/getData")
+  	@ResponseBody
+    public Map getData(HttpServletRequest request,HttpServletResponse response, ReptileEntity reptileEntity) throws Exception{
+		Map map = new HashMap();
+		try {
+			map.put("msg", true);
+			List dataList = reptileImpl.getData(reptileEntity);
+			map.put("data", dataList);
+		} catch (Exception e) {
+			map.put("msg", false);
+		}
+    	
+		return map;
 	}
 }

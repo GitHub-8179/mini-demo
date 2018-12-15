@@ -27,6 +27,12 @@
     <result column="details_txt" jdbcType="LONGVARBINARY" property="detailsTxt" />
     <result column="details_div" jdbcType="LONGVARBINARY" property="detailsDiv" />
   </resultMap>
+  
+   <resultMap id="getData" type="com.reptile.entity.ArticleWithBLOBs">
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="details_txt" jdbcType="LONGVARBINARY" property="detailsTxt" />
+  </resultMap>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -85,6 +91,7 @@
       </foreach>
     </where>
   </sql>
+  
   <sql id="Base_Column_List">
     article_id, article_type_id, article_title, article_keyword, author, update_time, 
     create_time, source, share_count, collect_count, collect_initcount, share_initcount, 
@@ -94,6 +101,21 @@
   <sql id="Blob_Column_List">
     content_crawl, details_txt, details_div
   </sql>
+  
+    <select id="selectaData" parameterType="com.reptile.entity.ArticleExample" resultMap="getData">
+		SELECT article_id ,details_txt FROM article1 WHERE state=1 and get_state=0 LIMIT 0,1000
+  	</select>
+  	
+  	<update id="updateDataState" parameterType="java.util.ArrayList">
+  		update article1 set get_state = 1 where article_id in (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+    
+  
+  
   <select id="selectByExampleWithBLOBs" parameterType="com.reptile.entity.ArticleExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">

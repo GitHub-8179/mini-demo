@@ -1,6 +1,8 @@
 package com.reptile.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.reptile.entity.Article;
 import com.reptile.entity.ArticleExample;
 import com.reptile.entity.ArticleType;
 import com.reptile.entity.ArticleTypeExample;
+import com.reptile.entity.ArticleWithBLOBs;
 import com.reptile.entity.IpPostEntity;
 import com.reptile.entity.ArticleTypeExample.Criteria;
 import com.reptile.entity.ReptileEntity;
@@ -51,6 +54,23 @@ public class ReptileImpl implements IReptile{
 		}
 		
 		return 0;
+	}
+
+	@Override
+	public List getData(ReptileEntity record) throws Exception {
+		List<ArticleWithBLOBs> list = articleMapper.selectaData(null);
+		List idList = new ArrayList();
+		List dataList = new ArrayList();
+
+		for (ArticleWithBLOBs articleWithBLOBs : list) {
+			idList.add(articleWithBLOBs.getArticleId());
+			dataList.add(new String(articleWithBLOBs.getDetailsTxt(),"UTF-8"));
+		}
+		if(articleMapper.updateDataState(idList)>0) {
+			return dataList; 
+		}
+		
+		return null;
 	}
 
 }
