@@ -4,12 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,6 @@ import com.reptile.entity.ArticleWithBLOBs;
 import com.reptile.entity.IpPostEntity;
 import com.reptile.service.Gather;
 import com.reptile.service.IReptile;
-import com.reptile.util.GetIPPost;
 
 @Component
 @EnableScheduling
@@ -49,10 +48,11 @@ public class SchedulerTask {
 		@Autowired
 		private Gather gather;
 		
-//		public List ipPost;
+		@Value("${ARTICLE_COOKIE}")
+		private String ARTICLE_COOKIE ;
+		
 	 
 	    @Scheduled(cron = "${TASK_TIME}")
-//	    @Scheduled(initialDelay = 10000,fixedRate = 1000*60)
 	    public void job2(){
 	    	PageHelper.startPage(1, 10);
 	    	ArticleExample example = new ArticleExample();
@@ -81,7 +81,7 @@ public class SchedulerTask {
 	    		detailsPath = article.getDetailsPath();
 				try {
 					i=0;
-					document = Gather.getHeader( ran, detailsPath,ipPost,i);
+					document = Gather.getHeader( ran, detailsPath,ipPost,i,ARTICLE_COOKIE);
 					if(document!=null) {
 						maxInfo = document.getElementsByTag("body").text();
 						if(maxInfo==null||"Maximum number of open connections reached.".equals(maxInfo)||
@@ -128,7 +128,6 @@ public class SchedulerTask {
 
 	    
 	    @Scheduled(cron = "${ArticleTask}")
-//	    @Scheduled(cron = "0 30 4 * * ?")
 	    public void job1(){
 		   try {
 			   ArticleTypeExample example = new ArticleTypeExample();

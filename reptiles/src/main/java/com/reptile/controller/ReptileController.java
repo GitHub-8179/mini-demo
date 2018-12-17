@@ -41,7 +41,6 @@ public class ReptileController {
 	
 //	@PostMapping("/insert")
 	@GetMapping("/getData")
-  	@ResponseBody
     public Map getData(HttpServletRequest request,HttpServletResponse response, ReptileEntity reptileEntity) throws Exception{
 		Map map = new HashMap();
 		try {

@@ -3,22 +3,13 @@ package com.reptile.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.net.URL;
 
 import org.jsoup.Connection;
-import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -57,6 +48,9 @@ public class Gather {
 	public void setUserAgent(List<String> userAgent) {
 		this.userAgent = userAgent;
 	}
+	
+	@Value("${WEB_CONDITION}")
+	private String WEB_CONDITION ;
 	
 	@Autowired
 	private ReptileDao mapper;
@@ -170,17 +164,22 @@ public class Gather {
 	public void setData(int contentType,ArticleType articleType,List<IpPostEntity> ipPost) throws Exception {
 
 		StringBuffer url = new StringBuffer(WEB_URL);
-		url.append("?type=2&ie=utf8&s_from=input");
-//		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "%26"));
-		url.append("&query="+articleType.getArticleTypeKeyword());
-//		url.append("&tsn=5");
-//		url.append("&ft=2018-12-01");
-//		url.append("&et=2018-12-09");
-//		url.append("&wxid=");
-//		url.append("&usip=");
-		url.append("&page=#;#;");
-		url.append("&_sug_type_=");
-		url.append("&_sug_=n");
+		url.append("?");
+//		url.append("?usip=&ft=&tsn=2&et=&interation=&type=2&wxid=&ie=utf8");
+		url.append(WEB_CONDITION);
+		
+//		url.append("?type=2&ie=utf8&query=机器人发展产业&tsn=5&ft=2018-12-15&et=2018-12-15&interation=&wxid=&usip=");
+//		url.append("?usip=&query=机器人发展产业&ft=2018-12-15&tsn=5&et=2018-12-15&interation=&type=2&wxid=&page=#;#;&ie=utf8");
+		url.append("&query="+articleType.getArticleTypeKeyword().toString().replace("&", "与"));
+//		url.append("&query="+articleType.getArticleTypeKeyword());
+////		url.append("&tsn=5");
+////		url.append("&ft=2018-12-01");
+////		url.append("&et=2018-12-09");
+////		url.append("&wxid=");
+////		url.append("&usip=");
+//		url.append("&page=#;#;");
+//		url.append("&_sug_type_=");
+//		url.append("&_sug_=n");
 		
 		 Random ran =  new Random() ;
 		 Element sogouNext = null;
@@ -196,12 +195,12 @@ public class Gather {
 		 Document document = null;
 		 int i = 0;
 		 String maxInfo ="";
-		 int j = 1;
-		 for (int j2 = 1; j2 < 100; j2++) {
+		 int j = 0;
+//		 for (int j2 = 1; j2 < 3; j2++) {
 			
-//		while(true) {
-			 urlPath = url.toString().replace("#;#;",j2+"");
-			document = getHeader(ran,urlPath,ipPost,i);
+		while(true) {
+//			 urlPath = url.toString().replace("#;#;",j2+"");
+			document = getHeader(ran,urlPath,ipPost,i,WEB_COOKIE);
 			if(document!=null) {
 				maxInfo = document.getElementsByTag("body").text();
 				if(maxInfo==null||
@@ -210,12 +209,15 @@ public class Gather {
 						maxInfo.startsWith("Not Found")||
 						maxInfo.indexOf("Internal Privoxy Error")!=-1||
 						maxInfo.indexOf("Server dropped connection")!=-1||
-						maxInfo.indexOf("Host Not Found or connection failed")!=-1
+						maxInfo.indexOf("Host Not Found or connection failed")!=-1||
+						maxInfo.length()<300
 						) {
-					j--;
+//					j2--;
+					 Thread.sleep(ran.nextInt(18000));
 					continue;}
 			}else {
-				j--;
+//				j2--;
+				 Thread.sleep(ran.nextInt(18000));
 				continue;
 			}
 			Element elements = document.getElementsByClass("news-list").last();
@@ -264,15 +266,22 @@ public class Gather {
 				}
 				
 			}
-//			sogouNext = document.getElementById("sogou_next");
-//			if(sogouNext==null) {
-//				log.info(articleType.getArticleTypeKeyword()+"访问到此结束："+urlPath);
-//				break;
-//			}else {
-//				urlPath = sogouNext.attr("href");
-//				urlPath= WEB_URL +urlPath;
-//				sogouNext = null;
-//			}
+			sogouNext = document.getElementById("sogou_next");
+			if(sogouNext==null) {
+				if(j==3) {
+					log.info(articleType.getArticleTypeKeyword()+"访问到此结束："+urlPath);
+					break;
+				}else {
+					j++;
+					Thread.sleep(ran.nextInt(18000));
+					continue;
+				}
+			}else {
+				j=0;
+				urlPath = sogouNext.attr("href");
+				urlPath= WEB_URL +urlPath;
+				sogouNext = null;
+			}
 			log.info("访问地址："+urlPath+"——长度："+maxInfo.length());
 			Thread.sleep(ran.nextInt(100000));
 
@@ -282,8 +291,11 @@ public class Gather {
 	}
 
 
-	public static Document getHeader(Random ran,String url,List<IpPostEntity> ipPost,int i) {
+	public static Document getHeader(Random ran,String url,List<IpPostEntity> ipPost,int i,String cookie) {
 		Document document =null;
+		IpPostEntity sp = ipPost.get(ran.nextInt(ipPost.size()));
+		String ip =sp.getIp();
+		int post = sp.getPost();
 		try {
 			Connection con= Jsoup.connect(url);//获取连接 
 		
@@ -293,30 +305,34 @@ public class Gather {
         con.header("Connection", "keep-alive");
         con.header("Upgrade-Insecure-Requests", "1");
 //        String[] sp = ipPost.get(ran.nextInt(ipPost.size())).split(":");
-        IpPostEntity sp = ipPost.get(ran.nextInt(ipPost.size()));
-        con.proxy(sp.getIp(), sp.getPost());
+        con.proxy(ip, post);
         con.header("User-Agent", userAgent.get(ran.nextInt(userAgent.size())));
         
         con.header("Host", "weixin.sogou.com");
         con.header("Referer", url);
-//        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; ppmdig=15443530730000003295079107421ccd971fa389d5e6f03a; sct=15; JSESSIONID=aaaIQXOl_9SDD6V9Lo_Cw");
-        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; SUIR=0B47ECD8706A0CFB0559A44C704AEBC9; sct=21; JSESSIONID=aaajt__2Pf9d2eETjK_Cw; ppmdig=15445330070000006c5188cea50d4ab1333d5d5d5e79f32a");
+        
+//        con.header("Cookie", "ABTEST=8|1544313106|v1; SNUID=0B47ECD8706A0CFB0559A44C704AEBC9; IPLOC=CN3301; SUID=7B379CB74018960A000000005C0C5913; SUID=7B379CB72C18960A000000005C0C5913; weixinIndexVisited=1; SUV=00201C77B79C377B5C0C5916385A3734; ppinf=5|1544317817|1545527417|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQzMTc4MTd8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=ZnrKxJTqVa_HUcaksE84209m-IIEtE-rqCZEYdH701HIlEoBc4r40OCOlo8Jv6A2KonQLsfnS5UD03XXVV1AOvgquS2J4iRUhSSU1cu-yNq4Dl0ujTqbP5THSgGvygISt2M-MRMxrM7GfGg2HC71UW6eeKoCKavQUX6yMdoxtyo; sgid=03-36145051-AVwMa3m3GicQ58O6ltvB9vtw; SUIR=0B47ECD8706A0CFB0559A44C704AEBC9; sct=21; JSESSIONID=aaajt__2Pf9d2eETjK_Cw; ppmdig=15445330070000006c5188cea50d4ab1333d5d5d5e79f32a");
+//        con.header("Cookie", "ABTEST=8|1544153475|v1; SUID=BA014BDA3F18960A000000005C09E983; SUV=00983DF2DA4B01BA5C09E98331DBF551; weixinIndexVisited=1; ppinf=5|1544160292|1545369892|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZToxODolRTQlQkUlOUQlRTYlOTclQTd8Y3J0OjEwOjE1NDQxNjAyOTJ8cmVmbmljazoxODolRTQlQkUlOUQlRTYlOTclQTd8dXNlcmlkOjQ0Om85dDJsdU1kbmsxVVdseWNjQ043Wkk5cGFaa1lAd2VpeGluLnNvaHUuY29tfA; pprdig=Fk8563UwtL1H3TTYQHewEGp41ihR84TGUCkHUcRfdLAZBXdff0tvxijOtdo8YNNGH7Ya--G34uH131XvItps99f-8pRvnV-Z5vYtITX5BF7yMGOpUNmxbIcVeUVW3i4VGeUOivdk0nZndixDNS3sB44pmiAoBojjndcow3Y6U1Q; sgid=03-36145051-AVwKBCRUFicJKZgGVUUV6ibww; CXID=15364FC0B482DDF7C561E62E2FB651CE; ad=7Zllllllll2tjXkelllllVZ3WR9lllllL67xmkllll9lllllxCxlw@@@@@@@@@@@; SUID=BA014BDA3118960A000000005C09E983; IPLOC=CN3301; SNUID=6354390FB9BDC449D34AC398B9438923; JSESSIONID=aaaRegtDbdShldgD2H-Cw; ppmdig=1544881373000000a09463599aa6e86a64a6d5aaa44532f0; sct=20");
+        con.header("Cookie", cookie);
+
         con.ignoreContentType(true).ignoreHttpErrors(true);
         con.timeout(1000 * 30);
 		con.maxBodySize(0);
 		System.setProperty("https.proxySet", "true");
-		System.getProperties().setProperty("http.proxyHost", sp.getIp());
-		System.getProperties().setProperty("http.proxyPort", sp.getPost()+"");
+		System.getProperties().setProperty("http.proxyHost", ip);
+		System.getProperties().setProperty("http.proxyPort", post+"");
 			document  = con.get();
 		} catch (Exception e) {
 			if(i==10) {
 				return null;
 			}
 			i++;
-			log.error("网络请求异常："+i+"次处理中........网络请求异常地址："+url);
+			log.error(ip+":"+post+"网络请求异常："+i+"次处理中........网络请求异常地址："+url);
 
-			return getHeader(ran,url,ipPost,i);
+			return getHeader(ran,url,ipPost,i,cookie);
 		}
+//		log.info(ip+":"+post+"请求地址："+url);
+
 		return  document;
 	}
 	
