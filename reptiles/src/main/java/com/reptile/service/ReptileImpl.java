@@ -65,13 +65,14 @@ public class ReptileImpl implements IReptile{
 		List idList = new ArrayList();
 		List dataList = new ArrayList();
 
-//		Map map = new HashMap();
+		Map map = new HashMap();
 		for (ArticleWithBLOBs articleWithBLOBs : list) {
 			idList.add(articleWithBLOBs.getArticleId());
-//			map = new HashMap();
-//			map.put("data", new String(articleWithBLOBs.getDetailsTxt(),"UTF-8"));
-//			dataList.add(map);
-			dataList.add(new String(articleWithBLOBs.getDetailsTxt(),"UTF-8"));
+			map = new HashMap();
+			map.put("txt", new String(articleWithBLOBs.getDetailsTxt(),"UTF-8"));
+			map.put("articleTypeId", articleWithBLOBs.getArticleTypeId());
+			map.put("articleKeyword", articleWithBLOBs.getArticleKeyword());
+			dataList.add(map);
 		}
 		if(articleMapper.updateDataState(idList)>0) {
 			log.info("抽取数据："+idList.size()+"条");

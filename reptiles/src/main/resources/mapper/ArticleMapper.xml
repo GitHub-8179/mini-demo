@@ -30,6 +30,8 @@
   
    <resultMap id="getData" type="com.reptile.entity.ArticleWithBLOBs">
     <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="article_type_id" jdbcType="DOUBLE" property="articleTypeId" />
+    <result column="article_keyword" jdbcType="VARCHAR" property="articleKeyword" />
     <result column="details_txt" jdbcType="LONGVARBINARY" property="detailsTxt" />
   </resultMap>
   
@@ -103,7 +105,7 @@
   </sql>
   
     <select id="selectaData" parameterType="com.reptile.entity.ArticleExample" resultMap="getData">
-		SELECT article_id ,details_txt FROM article1 WHERE state=1 and get_state=0 LIMIT 0,1000
+		SELECT article_id ,details_txt,article_type_id,article_keyword FROM article1 WHERE state=1 and get_state=0 LIMIT 0,1000
   	</select>
   	
   	<update id="updateDataState" parameterType="java.util.ArrayList">
@@ -111,7 +113,7 @@
         <foreach collection="list" item="item" index="index" separator=",">
             #{item}
         </foreach>
-        )
+        '')
     </update>
     
   
