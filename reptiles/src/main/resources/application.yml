@@ -1,13 +1,13 @@
 server:
   #端口号
-  port: 80
+  port: 8990
   #项目名，如果不设定，默认是 /
  # context-path: /vote
   
  #http://www.cnblogs.com/bigdataZJ/p/springboot-log.html
 logging:
   #日志存储地址
-  file: logs/config/reptiles.log
+  file: /usr/project/logs/reptiles.log
   level:
  #   sun: warn
  #   orgSpringframework: info
@@ -75,9 +75,10 @@ WEB_COOKIE: ABTEST=0|1545024878|v1; SNUID=C07831A37A7C074B59775B087AC6ABBE; IPLO
 
 USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.23 Safari/537.36
 
+DATA_NUM: 15
 #插入文章
 TASK_TIME: 0 0/2 * * * ?
 #文章概要扫描
-ArticleTask: 0 0 0 1/2 * ?
+ArticleTask: 0 0 0/1 1/1 * ? 
 #定时更新ip
-setIpPost: 0 0 7,15,23 * * ? 
+setIpPost: 0 0 5,9,16,23 1/2 * ? 

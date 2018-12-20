@@ -384,6 +384,8 @@
     update article1
     set 
       state = #{record.state,jdbcType=DOUBLE},
+      update_time = now() ,
+      details_size = length(#{record.detailsTxt,jdbcType=LONGVARBINARY}),
       details_txt = #{record.detailsTxt,jdbcType=LONGVARBINARY},
       details_div = #{record.detailsDiv,jdbcType=LONGVARBINARY}
       where article_id = #{record.articleId,jdbcType=VARCHAR}

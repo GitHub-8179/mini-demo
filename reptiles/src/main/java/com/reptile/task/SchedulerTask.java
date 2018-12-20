@@ -51,10 +51,13 @@ public class SchedulerTask {
 		@Value("${ARTICLE_COOKIE}")
 		private String ARTICLE_COOKIE ;
 		
+		@Value("${DATA_NUM}")
+		private int DATA_NUM ;
+		
 	 
 	    @Scheduled(cron = "${TASK_TIME}")
 	    public void job2(){
-	    	PageHelper.startPage(1, 10);
+	    	PageHelper.startPage(1, DATA_NUM);
 	    	ArticleExample example = new ArticleExample();
 	    	com.reptile.entity.ArticleExample.Criteria c  =  example.createCriteria();
 	    	c.andStateEqualTo(0);
