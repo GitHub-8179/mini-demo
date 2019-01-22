@@ -28,7 +28,6 @@ public class ReptilesApplication extends SpringBootServletInitializer{
         return builder.sources(ReptilesApplication.class);
     }
 	 
-	 
 		@Bean
 		public PageHelper pageHelper(){
 			PageHelper pageHelper = new PageHelper();
