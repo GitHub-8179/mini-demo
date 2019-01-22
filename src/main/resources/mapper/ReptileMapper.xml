@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reptile.dao.ReptileDao">
+  <resultMap id="BaseResultMap" type="com.reptile.entity.ReptileEntity">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <!-- <result column="ACTIVITY_NAME" jdbcType="VARCHAR" property="activityName" />
+    <result column="STAET_DATE" jdbcType="TIMESTAMP" property="staetDate" />
+    <result column="END_DATE" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="ACTIVITY_TYPE" jdbcType="VARCHAR" property="activityType" /> -->
+  </resultMap>
+  
+  <resultMap id="IpPostEntitytMap" type="com.reptile.entity.IpPostEntity">
+    <id column="IP" jdbcType="VARCHAR" property="ip" />
+    <id column="post" jdbcType="INTEGER" property="post" />
+  </resultMap>
+  
+
+  <insert id="insert" parameterType="com.reptile.entity.ReptileEntity">
+    INSERT INTO article1 (
+	ARTICLE_ID,
+	ARTICLE_TITLE,
+	AUTHOR,
+	CREATE_TIME,
+	CONTENT_CRAWL,
+	ARTICLE_KEYWORD,
+	SOURCE,
+	CONTENT_TYPE,
+	ARTICLE_TYPE_ID,
+	CONTENT_EXCERPT,
+	DETAILS_PATH,
+	SHARE_COUNT,COLLECT_COUNT,COLLECT_INITCOUNT,SHARE_INITCOUNT,STATE,get_state
+	) VALUES(
+	#{articleId},
+	#{articleTitle},
+	#{author},
+	FROM_UNIXTIME(#{createTime,jdbcType=BIGINT},'%Y-%m-%d %H:%I:%s'),
+	#{contentCrawl,jdbcType=LONGVARBINARY},
+	#{articleKeyword},
+	#{source},
+	#{contentType},
+	#{articleTypeId} ,
+	#{contentExcerpt} ,
+	#{detailsPath},
+	0,0,0,0,0,0 
+	)
+	ON DUPLICATE KEY UPDATE 
+	ARTICLE_ID = #{articleId},
+	ARTICLE_TITLE = #{articleTitle},
+	AUTHOR = #{author},
+	CREATE_TIME = FROM_UNIXTIME(#{createTime,jdbcType=BIGINT},'%Y-%m-%d %H:%I:%s'),
+	CONTENT_CRAWL = #{contentCrawl,jdbcType=LONGVARBINARY},
+	ARTICLE_KEYWORD = #{articleKeyword},
+	SOURCE = #{source},
+	CONTENT_TYPE = #{contentType},
+	ARTICLE_TYPE_ID = #{articleTypeId},
+	DETAILS_PATH = #{detailsPath},
+	STATE=IF(details_div IS NULL, 0, 1),
+	CONTENT_EXCERPT = #{contentExcerpt} 
+
+  </insert>
+  
+   <!--将所有信息插入PP表里面，传入参数为list,通过<foreach>来遍历list-->
+    <insert id="inserts" parameterType="java.util.ArrayList">
+        insert into article (ARTICLE_ID,ARTICLE_TITLE,AUTHOR,CREATE_TIME,CONTENT_CRAWL,ARTICLE_KEYWORD,SOURCE,CONTENT_TYPE,ARTICLE_TYPE_ID,CONTENT_EXCERPT) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.articleId},#{item.articleTitle},#{item.author},from_unixtime(#{item.createTime,jdbcType=BIGINT},'%Y-%m-%d %H:%I:%s')  ,#{item.contentCrawl,jdbcType=LONGVARBINARY}
+            ,#{item.articleKeyword},#{item.source},#{item.contentType},#{item.articleTypeId} ,#{item.contentExcerpt}  )
+        </foreach>
+    </insert>
+    
+    
+     <insert id="insertsIpPost" parameterType="com.reptile.entity.IpPostEntity">
+      INSERT ip_post (ip,post,creat_time,STATE) VALUES(
+		 #{ip},#{post},now(),#{state}
+		)ON DUPLICATE KEY UPDATE creat_time = now(),STATE=#{state}
+    </insert>
+    
+    
+     <select id="selectIpPost" parameterType="com.reptile.entity.IpPostEntity" resultMap="IpPostEntitytMap">
+
+		SELECT ip,post FROM ip_post 
+		<where>
+			<if test="state != null">
+				STATE=#{state}
+	    	</if>
+		</where>
+		
+	  </select>
+ 
+</mapper>

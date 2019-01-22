@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reptile.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.reptile.entity.Article">
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="article_type_id" jdbcType="DOUBLE" property="articleTypeId" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="article_keyword" jdbcType="VARCHAR" property="articleKeyword" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="share_count" jdbcType="DOUBLE" property="shareCount" />
+    <result column="collect_count" jdbcType="DOUBLE" property="collectCount" />
+    <result column="collect_initcount" jdbcType="DOUBLE" property="collectInitcount" />
+    <result column="share_initcount" jdbcType="DOUBLE" property="shareInitcount" />
+    <result column="content_type" jdbcType="DOUBLE" property="contentType" />
+    <result column="content_manual" jdbcType="VARCHAR" property="contentManual" />
+    <result column="content_readcount" jdbcType="DOUBLE" property="contentReadcount" />
+    <result column="content_excerpt" jdbcType="VARCHAR" property="contentExcerpt" />
+    <result column="image_path" jdbcType="VARCHAR" property="imagePath" />
+    <result column="state" jdbcType="DOUBLE" property="state" />
+    <result column="details_path" jdbcType="VARCHAR" property="detailsPath" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.reptile.entity.ArticleWithBLOBs">
+    <result column="content_crawl" jdbcType="LONGVARBINARY" property="contentCrawl" />
+    <result column="details_txt" jdbcType="LONGVARBINARY" property="detailsTxt" />
+    <result column="details_div" jdbcType="LONGVARBINARY" property="detailsDiv" />
+  </resultMap>
+  
+   <resultMap id="getData" type="com.reptile.entity.ArticleWithBLOBs">
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="article_type_id" jdbcType="DOUBLE" property="articleTypeId" />
+    <result column="article_keyword" jdbcType="VARCHAR" property="articleKeyword" />
+    <result column="details_txt" jdbcType="LONGVARBINARY" property="detailsTxt" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="Base_Column_List">
+    article_id, article_type_id, article_title, article_keyword, author, update_time, 
+    create_time, source, share_count, collect_count, collect_initcount, share_initcount, 
+    content_type, content_manual, content_readcount, content_excerpt, image_path, state, 
+    details_path
+  </sql>
+  <sql id="Blob_Column_List">
+    content_crawl, details_txt, details_div
+  </sql>
+  
+    <!-- <select id="selectaData" parameterType="com.reptile.entity.ArticleExample" resultMap="getData">
+		SELECT article_id ,details_txt,article_type_id,article_keyword FROM article1 WHERE state=1 and get_state=0 LIMIT 0,1000
+  	</select> -->
+  	
+  	 <select id="selectaData" parameterType="com.reptile.entity.ArticleExample" resultMap="getData">
+		SELECT article_id ,details_txt FROM article1
+		<!--  WHERE state=1 -->
+	<if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     ORDER BY create_time
+  	</select>
+  	
+  	<update id="updateDataState" parameterType="java.util.ArrayList">
+  		update article1 set get_state = 1 where article_id in (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        '')
+    </update>
+    
+  
+  
+  <select id="selectByExampleWithBLOBs" parameterType="com.reptile.entity.ArticleExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.reptile.entity.ArticleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from article1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.reptile.entity.ArticleWithBLOBs">
+    insert into article (article_id, article_type_id, article_title, 
+      article_keyword, author, update_time, 
+      create_time, source, share_count, 
+      collect_count, collect_initcount, share_initcount, 
+      content_type, content_manual, content_readcount, 
+      content_excerpt, image_path, state, 
+      details_path, content_crawl, details_txt, 
+      details_div)
+    values (#{articleId,jdbcType=VARCHAR}, #{articleTypeId,jdbcType=DOUBLE}, #{articleTitle,jdbcType=VARCHAR}, 
+      #{articleKeyword,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{source,jdbcType=VARCHAR}, #{shareCount,jdbcType=DOUBLE}, 
+      #{collectCount,jdbcType=DOUBLE}, #{collectInitcount,jdbcType=DOUBLE}, #{shareInitcount,jdbcType=DOUBLE}, 
+      #{contentType,jdbcType=DOUBLE}, #{contentManual,jdbcType=VARCHAR}, #{contentReadcount,jdbcType=DOUBLE}, 
+      #{contentExcerpt,jdbcType=VARCHAR}, #{imagePath,jdbcType=VARCHAR}, #{state,jdbcType=DOUBLE}, 
+      #{detailsPath,jdbcType=VARCHAR}, #{contentCrawl,jdbcType=LONGVARBINARY}, #{detailsTxt,jdbcType=LONGVARBINARY}, 
+      #{detailsDiv,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.reptile.entity.ArticleWithBLOBs">
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="articleTypeId != null">
+        article_type_id,
+      </if>
+      <if test="articleTitle != null">
+        article_title,
+      </if>
+      <if test="articleKeyword != null">
+        article_keyword,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="shareCount != null">
+        share_count,
+      </if>
+      <if test="collectCount != null">
+        collect_count,
+      </if>
+      <if test="collectInitcount != null">
+        collect_initcount,
+      </if>
+      <if test="shareInitcount != null">
+        share_initcount,
+      </if>
+      <if test="contentType != null">
+        content_type,
+      </if>
+      <if test="contentManual != null">
+        content_manual,
+      </if>
+      <if test="contentReadcount != null">
+        content_readcount,
+      </if>
+      <if test="contentExcerpt != null">
+        content_excerpt,
+      </if>
+      <if test="imagePath != null">
+        image_path,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="detailsPath != null">
+        details_path,
+      </if>
+      <if test="contentCrawl != null">
+        content_crawl,
+      </if>
+      <if test="detailsTxt != null">
+        details_txt,
+      </if>
+      <if test="detailsDiv != null">
+        details_div,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=VARCHAR},
+      </if>
+      <if test="articleTypeId != null">
+        #{articleTypeId,jdbcType=DOUBLE},
+      </if>
+      <if test="articleTitle != null">
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleKeyword != null">
+        #{articleKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCount != null">
+        #{shareCount,jdbcType=DOUBLE},
+      </if>
+      <if test="collectCount != null">
+        #{collectCount,jdbcType=DOUBLE},
+      </if>
+      <if test="collectInitcount != null">
+        #{collectInitcount,jdbcType=DOUBLE},
+      </if>
+      <if test="shareInitcount != null">
+        #{shareInitcount,jdbcType=DOUBLE},
+      </if>
+      <if test="contentType != null">
+        #{contentType,jdbcType=DOUBLE},
+      </if>
+      <if test="contentManual != null">
+        #{contentManual,jdbcType=VARCHAR},
+      </if>
+      <if test="contentReadcount != null">
+        #{contentReadcount,jdbcType=DOUBLE},
+      </if>
+      <if test="contentExcerpt != null">
+        #{contentExcerpt,jdbcType=VARCHAR},
+      </if>
+      <if test="imagePath != null">
+        #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=DOUBLE},
+      </if>
+      <if test="detailsPath != null">
+        #{detailsPath,jdbcType=VARCHAR},
+      </if>
+      <if test="contentCrawl != null">
+        #{contentCrawl,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="detailsTxt != null">
+        #{detailsTxt,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="detailsDiv != null">
+        #{detailsDiv,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update article
+    <set>
+      <if test="record.articleId != null">
+        article_id = #{record.articleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.articleTypeId != null">
+        article_type_id = #{record.articleTypeId,jdbcType=DOUBLE},
+      </if>
+      <if test="record.articleTitle != null">
+        article_title = #{record.articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.articleKeyword != null">
+        article_keyword = #{record.articleKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareCount != null">
+        share_count = #{record.shareCount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.collectCount != null">
+        collect_count = #{record.collectCount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.collectInitcount != null">
+        collect_initcount = #{record.collectInitcount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.shareInitcount != null">
+        share_initcount = #{record.shareInitcount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.contentType != null">
+        content_type = #{record.contentType,jdbcType=DOUBLE},
+      </if>
+      <if test="record.contentManual != null">
+        content_manual = #{record.contentManual,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentReadcount != null">
+        content_readcount = #{record.contentReadcount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.contentExcerpt != null">
+        content_excerpt = #{record.contentExcerpt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imagePath != null">
+        image_path = #{record.imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=DOUBLE},
+      </if>
+      <if test="record.detailsPath != null">
+        details_path = #{record.detailsPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentCrawl != null">
+        content_crawl = #{record.contentCrawl,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.detailsTxt != null">
+        details_txt = #{record.detailsTxt,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.detailsDiv != null">
+        details_div = #{record.detailsDiv,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByDetails" parameterType="map">
+    update article1
+    set 
+      state = #{record.state,jdbcType=DOUBLE},
+      update_time = now() ,
+      details_txt = #{record.detailsTxt,jdbcType=LONGVARBINARY},
+      details_size = #{record.collectInitcount,jdbcType=DOUBLE},
+      details_div = #{record.detailsDiv,jdbcType=LONGVARBINARY}
+      where article_id = #{record.articleId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update article
+    set article_id = #{record.articleId,jdbcType=VARCHAR},
+      article_type_id = #{record.articleTypeId,jdbcType=DOUBLE},
+      article_title = #{record.articleTitle,jdbcType=VARCHAR},
+      article_keyword = #{record.articleKeyword,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR},
+      share_count = #{record.shareCount,jdbcType=DOUBLE},
+      collect_count = #{record.collectCount,jdbcType=DOUBLE},
+      collect_initcount = #{record.collectInitcount,jdbcType=DOUBLE},
+      share_initcount = #{record.shareInitcount,jdbcType=DOUBLE},
+      content_type = #{record.contentType,jdbcType=DOUBLE},
+      content_manual = #{record.contentManual,jdbcType=VARCHAR},
+      content_readcount = #{record.contentReadcount,jdbcType=DOUBLE},
+      content_excerpt = #{record.contentExcerpt,jdbcType=VARCHAR},
+      image_path = #{record.imagePath,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=DOUBLE},
+      details_path = #{record.detailsPath,jdbcType=VARCHAR},
+      content_crawl = #{record.contentCrawl,jdbcType=LONGVARBINARY},
+      details_txt = #{record.detailsTxt,jdbcType=LONGVARBINARY},
+      details_div = #{record.detailsDiv,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update article
+    set article_id = #{record.articleId,jdbcType=VARCHAR},
+      article_type_id = #{record.articleTypeId,jdbcType=DOUBLE},
+      article_title = #{record.articleTitle,jdbcType=VARCHAR},
+      article_keyword = #{record.articleKeyword,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR},
+      share_count = #{record.shareCount,jdbcType=DOUBLE},
+      collect_count = #{record.collectCount,jdbcType=DOUBLE},
+      collect_initcount = #{record.collectInitcount,jdbcType=DOUBLE},
+      share_initcount = #{record.shareInitcount,jdbcType=DOUBLE},
+      content_type = #{record.contentType,jdbcType=DOUBLE},
+      content_manual = #{record.contentManual,jdbcType=VARCHAR},
+      content_readcount = #{record.contentReadcount,jdbcType=DOUBLE},
+      content_excerpt = #{record.contentExcerpt,jdbcType=VARCHAR},
+      image_path = #{record.imagePath,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=DOUBLE},
+      details_path = #{record.detailsPath,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>
